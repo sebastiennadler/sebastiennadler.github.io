@@ -1,0 +1,79 @@
+@font-face{ /* Définition d'une nouvelle police nommée LearningCurveProRegular */
+   font-family: 'LearningCurveProRegular';
+   src: url('LearningCurve_OT-webfont.eot');
+   src: url('LearningCurve_OT-webfont.eot?#iefix') format('embedded-opentype'),
+   url('LearningCurve_OT-webfont.woff') format('woff'),
+   url('LearningCurve_OT-webfont.ttf') format('truetype'),
+   url('LearningCurve_OT-webfont.svg#LearningCurveProRegular') format('svg');
+
+  }
+  
+  
+h1 /* Utilisation de la police qu'on vient de définir sur les titres */
+{
+  font-family: 'LearningCurveProRegular', Arial, serif;
+  
+  }
+
+
+
+#photo{
+    -webkit-transform:scale(0.9)rotateZ(5deg)rotateY(5deg)rotateY(15deg);
+    transform: scale(0.9)rotateZ(5deg)rotateY(5deg)rotateY(15deg);
+}
+
+
+#commentaire{
+    width:300;
+    height:200;
+}
+
+.Doctorat{
+    color : green;}
+body{
+    text-align:justify;
+    color:black;
+    background-image: url("images/back.jpg");
+    background-attachment:fixed;
+    /*perspective:80 px;
+    perspective-origin:top right;*/
+    }
+
+
+a:hover
+{
+    color:green;
+    texte-decoration:underline;
+}
+
+a:visited
+{
+    color: purple;
+}
+
+h1{
+    text-align:center;
+    border:2px black solid;
+    border-radius:5px;
+    box-shadow:5px 5px 3px black;}
+
+.seb{
+    float: right;
+}
+
+
+
+
+.tableau{
+    color:black;
+}
+
+
+
+@font-face{
+    font-family:"Toto"
+    src:url("TotoPolice.woff");
+
+}
+
+
