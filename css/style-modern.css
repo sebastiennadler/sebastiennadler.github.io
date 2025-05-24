@@ -201,6 +201,9 @@ footer a:hover {
   }
   .nav-links.show { display: flex; }
   .hamburger { display: block;}
+  #theme-toggle {
+    display: none !important;
+  }
 }
 @media (max-width: 420px) {
   .hero h1 { font-size: 1.08rem; }
