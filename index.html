@@ -28,7 +28,7 @@
       <li><a href="apropos.html">À propos</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
-    <button id="theme-toggle" aria-label="Changer de thème"></button>
+    <button id="theme-toggle" aria-label="Changer de thème">🌙</button>
   </nav>
 
   
@@ -64,6 +64,21 @@
     document.getElementById('menu-toggle').onclick = function() {
       document.querySelector('.nav-links').classList.toggle('show');
     };
+
+    // Thème clair/sombre
+    const themeToggle = document.getElementById('theme-toggle');
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      themeToggle.textContent = theme === 'dark' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+    themeToggle.onclick = function() {
+      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      setTheme(current);
+    };
+    // Initialisation au chargement
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
   </script>
 </body>
 </html>
