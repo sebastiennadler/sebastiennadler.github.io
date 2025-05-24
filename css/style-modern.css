@@ -242,3 +242,32 @@ footer a:hover {
   .lightbox-img { max-width: 99vw; max-height: 78vh; }
 }
 
+/* Champs de formulaire vraiment transparents */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+textarea,
+select {
+  background: transparent !important; /* force la transparence */
+  color: #f4efe9;
+  border: 1px solid #b8bac2;
+  border-radius: 14px;
+  padding: 0.9em 1.2em;
+  font-size: 1.08rem;
+  box-shadow: 0 2px 14px #19171b18;
+  transition: background 0.2s, box-shadow 0.2s;
+  outline: none;
+  /* Pour éviter le fond noir sur iOS */
+  -webkit-box-shadow: 0 0 0 1000px transparent inset;
+  box-shadow: 0 2px 14px #19171b18, 0 0 0 1000px transparent inset;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  background: rgba(28, 28, 31, 0.13) !important; /* très léger voile au focus */
+  box-shadow: 0 4px 22px #19171b33, 0 0 0 1000px transparent inset;
+  border-color: #e9ecef;
+}
+
