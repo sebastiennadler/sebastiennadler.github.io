@@ -121,9 +121,10 @@
   </div>
   
   <!-- ===== Pied de page commun à tout le site ===== -->
-<footer>
-  <p>© 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
-</footer>
+  <footer>
+
+    <p>&copy; 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
+  </footer>
   
   <!-- ===== Scripts spécifiques à la page ===== -->
   <script>

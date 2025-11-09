@@ -13,12 +13,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style-modern.css">
 
-  <!-- Favicon : signature d'Ana (affiché dans l'onglet) -->
-  <link rel="icon" type="image/png" sizes="32x32" href="img/signature.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="img/signature.png">
-  <link rel="shortcut icon" href="img/signature.png">
-  <link rel="apple-touch-icon" href="img/signature.png">
-
 <style>
 /* --- Correctifs mobile: signature visible, hamburger réduit, titres centrés --- */
 @media (max-width: 840px){
@@ -70,9 +64,10 @@
   </main>
   
   <!-- ===== Pied de page commun à tout le site ===== -->
-<footer>
-  <p>© 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
-</footer>
+  <footer>
+
+    <p>&copy; 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
+  </footer>
   
   <!-- ===== Scripts spécifiques à la page ===== -->
   <script>

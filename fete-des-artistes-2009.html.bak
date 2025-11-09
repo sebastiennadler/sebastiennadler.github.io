@@ -9,7 +9,7 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sur le sentier du dragonnier (2008) - Ana Ruiz</title>
+  <title>Fête des artistes (2009) - Ana Ruiz</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style-modern.css">
   <style>
@@ -21,6 +21,7 @@
     .gallery-work { background: rgba(38,37,41,0.12); border-radius: 16px; box-shadow: 0 2px 14px #19171b18; overflow: hidden; display: flex; flex-direction: column; align-items: center; transition: box-shadow 0.16s; }
     .gallery-work img { width: 100%; height: 260px; object-fit: cover; background: #222; display: block; cursor: pointer; }
     .gallery-work-title { margin: 1em 0 0.6em 0; color: #f4efe9; font-family: 'Playfair Display', serif; font-size: 1.09rem; font-weight: 700; letter-spacing: 0.2px; text-align: center; }
+    .gallery-work-desc { color: #c7c7c7; font-size: 0.99rem; text-align: center; margin-bottom: 1em; }
     .gallery-citation { margin: 2.5em auto 1.5em auto; color: #a7a2b6; background: rgba(44,44,48,0.18); border-left: 3px solid #8b858c; font-style: italic; font-size: 1.07rem; padding: 1em 1.3em; max-width: 650px; border-radius: 10px; box-shadow: 0 2px 14px #19171b18; }
     .gallery-back { display: flex; justify-content: center; margin-top: 2.5em; }
     .gallery-back a { font-size: 1rem; color: #968a7f; text-decoration: none; background: rgba(238, 233, 222, 0.12); padding: 0.7em 1.5em; border-radius: 18px; transition: background 0.14s, color 0.14s; box-shadow: 0 2px 9px #18101421; }
@@ -73,40 +74,37 @@
   <main>
 
     <div class="gallery-page fade-in">
-      <div class="gallery-title">Sur le sentier du dragonnier (2008)</div>
+      <div class="gallery-title">Fête des artistes (2009)</div>
       <div class="gallery-desc">
-        Cheminer au fil du végétal, dans l’univers mystique du dragonnier, entre mémoire et métamorphose.
+        Hommage aux artistes, à la création partagée, à la fête et à la fraternité de l’art.
       </div>
       <div class="gallery-works">
 
         <div class="gallery-work">
-          <img src="img/dragonnier-couverture.jpg" alt="Dragonnier couverture">
-          <div class="gallery-work-title">Dragonnier couverture</div>
+          <img src="img/fda-2009-couverture.jpg" alt="Fête des artistes couverture">
+          <div class="gallery-work-title">Fête des artistes couverture</div>
+          <div class="gallery-work-desc"></div>
         </div>
         <div class="gallery-work">
-          <img src="img/le-vieux-dragonnier.jpg" alt="Le vieux dragonnier">
-          <div class="gallery-work-title">Le vieux dragonnier</div>
+          <img src="img/entre-lafrique-et-leurope.jpg" alt="Entre l'Afrique et l'Europe">
+          <div class="gallery-work-title">Entre l'Afrique et l'Europe</div>
+          <div class="gallery-work-desc"></div>
         </div>
         <div class="gallery-work">
-          <img src="img/le-vieux-volcan.jpg" alt="Le vieux volcan">
-          <div class="gallery-work-title">Le vieux volcan</div>
+          <img src="img/athenes.jpg" alt="Athènes">
+          <div class="gallery-work-title">Athènes</div>
+          <div class="gallery-work-desc"></div>
         </div>
         <div class="gallery-work">
-          <img src="img/au-dessous-du-volcan.jpg" alt="Au-dessous du volcan">
-          <div class="gallery-work-title">Au-dessous du volcan</div>
+          <img src="img/naples.jpg" alt="Naples">
+          <div class="gallery-work-title">Naples</div>
+          <div class="gallery-work-desc"></div>
         </div>
-        <div class="gallery-work">
-          <img src="img/sable-noir.jpg" alt="Sable noir">
-          <div class="gallery-work-title">Sable noir</div>
-        </div>
-        <div class="gallery-work">
-          <img src="img/annapurna.jpg" alt="Annapurna">
-          <div class="gallery-work-title">Annapurna</div>
-        </div>
+        <!-- Ajoute d’autres œuvres selon ta version initiale en gardant ce modèle -->
 
       </div>
       <div class="gallery-citation">
-        «&nbsp;Le sentier du dragonnier, c’est aussi le sentier de la mémoire, de la transformation...&nbsp;»
+        «&nbsp;L’art est une fête à partager...&nbsp;»
       </div>
       <div class="gallery-back">
         <a href="galeries.html">&larr; Retour aux galeries</a>
@@ -121,9 +119,10 @@
   </div>
   
   <!-- ===== Pied de page commun à tout le site ===== -->
-<footer>
-  <p>© 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
-</footer>
+  <footer>
+
+    <p>&copy; 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
+  </footer>
   
   <!-- ===== Scripts spécifiques à la page ===== -->
   <script>
@@ -168,4 +167,3 @@
   </script>
 </body>
 </html>
-
