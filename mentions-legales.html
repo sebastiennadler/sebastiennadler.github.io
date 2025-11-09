@@ -48,30 +48,62 @@
       .legal-container { font-size: 0.98rem; padding: 1.2em 0.6em;}
     }
   </style>
+<style>
+/* --- Ergonomie & accessibilité --- */
+*{box-sizing:border-box}
+html:focus-within{scroll-behavior:smooth}
+body{margin:0;line-height:1.6}
+:focus{outline:2px solid currentColor;outline-offset:3px}
+.skip-link{position:absolute;left:-9999px;top:auto}
+.skip-link:focus{left:1rem;top:1rem;z-index:1000;padding:.5rem .75rem;background:#fff;color:#000;border-radius:.5rem}
+.navbar{position:sticky;top:0;background:rgba(21,21,22,.92);backdrop-filter:saturate(180%) blur(8px);z-index:999;border-bottom:1px solid rgba(255,255,255,.08)}
+.navbar-container{max-width:1100px;margin:0 auto;padding:.5rem 1rem;display:flex;align-items:center;gap:1rem}
+.nav-logo{font-weight:700;text-decoration:none;color:inherit}
+.hamburger{margin-left:auto;font-size:1.25rem;border:1px solid rgba(255,255,255,.25);background:transparent;border-radius:.5rem;padding:.35rem .5rem;color:inherit}
+.nav-links{display:flex;gap:1rem;list-style:none;margin:0;padding:0}
+.nav-links a{color:inherit;text-decoration:none;padding:.25rem .5rem;border-radius:.35rem}
+.nav-links a:focus,.nav-links a:hover{background:rgba(255,255,255,.1)}
+@media (max-width: 840px){
+  .nav-links{display:none;flex-direction:column;padding:.5rem 0}
+  .nav-links.open{display:flex}
+}
+/* Galeries grid */
+.galerie{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+.galerie figure{margin:0;border-radius:.75rem;overflow:hidden;background:rgba(0,0,0,.04)}
+.galerie img{display:block;width:100%;height:auto}
+.galerie figcaption{padding:.5rem .75rem;opacity:.85}
+.galerie a{display:block}
+</style>
+<style>
+.nav-signature{margin-left:.5rem;opacity:.85;user-select:none;pointer-events:none}
+.nav-signature img{display:block;height:28px;width:auto;opacity:.9}
+@media (max-width: 840px){.nav-signature{display:none}}
+</style>
 </head>
+\1
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<nav class="navbar" role="navigation" aria-label="Navigation principale">
+  <div class="navbar-container">
+    <a class="nav-logo" href="index.html">Ana Ruiz</a>
+    <span class="nav-signature" aria-hidden="true"><img src="img/signature.png" alt="" /></span>
+    <button id="menu-toggle"
+            class="hamburger"
+            aria-expanded="false"
+            aria-controls="nav-links"
+            aria-label="Ouvrir le menu">☰</button>
+    <ul id="nav-links" class="nav-links" role="menu">
+      <li role="none"><a role="menuitem" href="galeries.html">Galeries</a></li>
+      <li role="none"><a role="menuitem" href="diaporama.html">Diaporama</a></li>
+      <li role="none"><a role="menuitem" href="apropos.html">À propos</a></li>
+      <li role="none"><a role="menuitem" href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
 
-<body>
-  <!-- ===== Barre de navigation principale ===== -->
+<!-- ===== Barre de navigation principale ===== -->
 
-  <nav class="navbar">
-    <div class="navbar-container">
-      <div class="nav-logo">
-        <a href="index.html">Ana Ruiz</a>
-        <img src="img/signature.png" alt="Signature Ana Ruiz" class="nav-signature">
-      </div>
-      <button id="menu-toggle" aria-label="Ouvrir le menu" class="hamburger">&#9776;</button>
-      <ul class="nav-links">
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="galeries.html">Galeries</a></li>
-        <li><a href="diaporama.html">Diaporama</a></li>
-        <li><a href="apropos.html">À propos</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </div>
-  </nav>
-  
   <!-- ===== Contenu principal de la page ===== -->
-  <main>
+  <main id="contenu">
 
     <div class="legal-container fade-in">
       <h1>Mentions légales</h1>
@@ -116,5 +148,23 @@
       });
     });
   </script>
+<script>
+// Menu toggle + ARIA
+(function(){
+  const btn = document.getElementById('menu-toggle');
+  const links = document.getElementById('nav-links');
+  if(btn && links){
+    btn.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    document.documentElement.classList.add('reduced-motion');
+  }
+})();
+</script>
 </body>
 </html>
+
+</body>
