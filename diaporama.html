@@ -130,62 +130,46 @@
       .fullscreen-close { top: 8px; right: 12px; font-size: 2rem;}
     }
   </style>
+
 <style>
-/* --- Ergonomie & accessibilité --- */
-*{box-sizing:border-box}
-html:focus-within{scroll-behavior:smooth}
-body{margin:0;line-height:1.6}
-:focus{outline:2px solid currentColor;outline-offset:3px}
-.skip-link{position:absolute;left:-9999px;top:auto}
-.skip-link:focus{left:1rem;top:1rem;z-index:1000;padding:.5rem .75rem;background:#fff;color:#000;border-radius:.5rem}
-.navbar{position:sticky;top:0;background:rgba(21,21,22,.92);backdrop-filter:saturate(180%) blur(8px);z-index:999;border-bottom:1px solid rgba(255,255,255,.08)}
-.navbar-container{max-width:1100px;margin:0 auto;padding:.5rem 1rem;display:flex;align-items:center;gap:1rem}
-.nav-logo{font-weight:700;text-decoration:none;color:inherit}
-.hamburger{margin-left:auto;font-size:1.25rem;border:1px solid rgba(255,255,255,.25);background:transparent;border-radius:.5rem;padding:.35rem .5rem;color:inherit}
-.nav-links{display:flex;gap:1rem;list-style:none;margin:0;padding:0}
-.nav-links a{color:inherit;text-decoration:none;padding:.25rem .5rem;border-radius:.35rem}
-.nav-links a:focus,.nav-links a:hover{background:rgba(255,255,255,.1)}
+/* --- Correctifs mobile: signature visible, hamburger réduit, titres centrés --- */
 @media (max-width: 840px){
-  .nav-links{display:none;flex-direction:column;padding:.5rem 0}
+  /* Afficher la signature en mobile et la réduire */
+  .nav-signature{display:block; height:20px; width:auto; margin-left:.25rem; opacity:.95}
+  .nav-signature img{height:20px; width:auto; display:block; opacity:.95}
+  /* Bouton hamburger plus petit et mieux clicable */
+  .hamburger{margin-left:auto; width:40px; height:36px; padding:0; display:grid; place-items:center; font-size:1rem; line-height:1; border-radius:.5rem}
+  /* Menu mobile: centrer les titres et l'alignement */
+  .nav-links{display:none; flex-direction:column; align-items:center; text-align:center}
   .nav-links.open{display:flex}
+  .nav-links a{display:block; padding:.6rem 0; font-size:1.05rem}
 }
-/* Galeries grid */
-.galerie{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
-.galerie figure{margin:0;border-radius:.75rem;overflow:hidden;background:rgba(0,0,0,.04)}
-.galerie img{display:block;width:100%;height:auto}
-.galerie figcaption{padding:.5rem .75rem;opacity:.85}
-.galerie a{display:block}
 </style>
-<style>
-.nav-signature{margin-left:.5rem;opacity:.85;user-select:none;pointer-events:none}
-.nav-signature img{display:block;height:28px;width:auto;opacity:.9}
-@media (max-width: 840px){.nav-signature{display:none}}
-</style>
+
 </head>
-\1
-<a class="skip-link" href="#contenu">Aller au contenu</a>
-<nav class="navbar" role="navigation" aria-label="Navigation principale">
-  <div class="navbar-container">
-    <a class="nav-logo" href="index.html">Ana Ruiz</a>
-    <span class="nav-signature" aria-hidden="true"><img src="img/signature.png" alt="" /></span>
-    <button id="menu-toggle"
-            class="hamburger"
-            aria-expanded="false"
-            aria-controls="nav-links"
-            aria-label="Ouvrir le menu">☰</button>
-    <ul id="nav-links" class="nav-links" role="menu">
-      <li role="none"><a role="menuitem" href="galeries.html">Galeries</a></li>
-      <li role="none"><a role="menuitem" href="diaporama.html">Diaporama</a></li>
-      <li role="none"><a role="menuitem" href="apropos.html">À propos</a></li>
-      <li role="none"><a role="menuitem" href="contact.html">Contact</a></li>
-    </ul>
-  </div>
-</nav>
 
-<!-- ===== Barre de navigation principale ===== -->
+<body>
+  <!-- ===== Barre de navigation principale ===== -->
 
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="nav-logo">
+        <a href="index.html">Ana Ruiz</a>
+        <img src="img/signature.png" alt="Signature Ana Ruiz" class="nav-signature">
+      </div>
+      <button id="menu-toggle" aria-label="Ouvrir le menu" class="hamburger">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="galeries.html">Galeries</a></li>
+        <li><a href="diaporama.html" class="active">Diaporama</a></li>
+        <li><a href="apropos.html">À propos</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+  
   <!-- ===== Contenu principal de la page ===== -->
-  <main id="contenu">
+  <main>
 
     <div class="diaporama-container fade-in">
       <div class="diapo-title">Diaporama</div>
@@ -225,31 +209,31 @@ body{margin:0;line-height:1.6}
       "img/andaloucia-1.jpg",
       "img/andaloucia-2.jpg",
       "img/andaloucia-3.jpg",
-      "img/sur-le-sentier-du-dragonnier-2008/annapurna.jpg",
-      "img/fete-des-artistes-2009/athenes.jpg",
-      "img/couleurs-en-nudite-2007/au-bord-du-visible.jpg",
-      "img/sur-le-sentier-du-dragonnier-2008/au-dessous-du-volcan.jpg",
-      "img/couleurs-en-nudite-2007/chaleur-dafrique.jpg",
-      "img/sur-le-sentier-du-dragonnier-2008/dragonnier-couverture.jpg",
-      "img/couleurs-en-nudite-2007/eaux-rouges.jpg",
-      "img/couleurs-en-nudite-2007/entre-lafrique-et-leurope.jpg",
-      "img/fete-des-artistes-2009/fda-2009-couverture.jpg",
-      "img/couleurs-en-nudite-2007/force-tranquille.jpg",
+      "img/annapurna.jpg",
+      "img/athenes.jpg",
+      "img/au-bord-du-visible.jpg",
+      "img/au-dessous-du-volcan.jpg",
+      "img/chaleur-dafrique.jpg",
+      "img/dragonnier-couverture.jpg",
+      "img/eaux-rouges.jpg",
+      "img/entre-lafrique-et-leurope.jpg",
+      "img/fda-2009-couverture.jpg",
+      "img/force-tranquille.jpg",
       "img/guizeh.jpg",
-      "img/sur-le-sentier-du-dragonnier-2008/le-vieux-dragonnier.jpg",
-      "img/sur-le-sentier-du-dragonnier-2008/le-vieux-volcan.jpg",
+      "img/le-vieux-dragonnier.jpg",
+      "img/le-vieux-volcan.jpg",
       "img/llanes.jpg",
-      "img/la-maison-ou-le-pouvoir-de-rentrer-en-soi-meme-2012/maison-chrysalide.jpg",
+      "img/maison-chrysalide.jpg",
       "img/maison-de-thyphee.jpg",
-      "img/la-maison-ou-le-pouvoir-de-rentrer-en-soi-meme-2012/maison-floride.jpg",
+      "img/maison-floride.jpg",
       "img/maison-palais-prison.jpg",
-      "img/la-maison-ou-le-pouvoir-de-rentrer-en-soi-meme-2012/maison-paradis-perdu.jpg",
-      "img/la-maison-ou-le-pouvoir-de-rentrer-en-soi-meme-2012/maison-sacree.jpg",
+      "img/maison-paradis-perdu.jpg",
+      "img/maison-sacree.jpg",
       "img/maison-temple.jpg",
-      "img/fete-des-artistes-2009/naples.jpg",
-      "img/couleurs-en-nudite-2007/nudite-couverture.jpg",
-      "img/sur-le-sentier-du-dragonnier-2008/sable-noir.jpg",
-      "img/couleurs-en-nudite-2007/sur-la-terre.jpg"
+      "img/naples.jpg",
+      "img/nudite-couverture.jpg",
+      "img/sable-noir.jpg",
+      "img/sur-la-terre.jpg"
     ];
     let current = 0, autoPlay = true, timer = null;
 
@@ -373,23 +357,5 @@ body{margin:0;line-height:1.6}
       });
     });
   </script>
-<script>
-// Menu toggle + ARIA
-(function(){
-  const btn = document.getElementById('menu-toggle');
-  const links = document.getElementById('nav-links');
-  if(btn && links){
-    btn.addEventListener('click', () => {
-      const open = links.classList.toggle('open');
-      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-  }
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    document.documentElement.classList.add('reduced-motion');
-  }
-})();
-</script>
 </body>
 </html>
-
-</body>
