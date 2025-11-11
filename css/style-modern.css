@@ -104,11 +104,14 @@ body {
   .nav-links{ display:none; flex-direction:column; align-items:stretch; width:100%; gap:0; padding:0.25rem 0; }
   .nav-links.open, .nav-links.show { display:flex !important; }
 
-  /* lorsque le menu mobile est ouvert, labels tactiles plus lisibles */
+  /* lorsque le menu mobile est ouvert : centrer les libellés et autoriser le retour à la ligne */
   .nav-links.open a, .nav-links.show a{
     font-size: clamp(1rem, 4.2vw, 1.12rem) !important;
     padding:.6rem .9rem !important;
-    text-align:left;
+    text-align:center !important;
+    white-space: normal !important; /* autorise le wrapping au lieu de tronquer */
+    width:100%;
+    box-sizing: border-box;
   }
 }
 
