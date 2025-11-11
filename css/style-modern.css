@@ -40,7 +40,7 @@ body {
   --nav-link-focus: rgba(255,255,255,0.06);
 }
 
-/* conteneur */
+/* conteneur : légèrement plus large pour éviter les retours à la ligne */
 .navbar{
   padding: var(--nav-padding-vertical) var(--nav-padding-horizontal) !important;
   background: var(--nav-bg) !important;
@@ -48,7 +48,7 @@ body {
   z-index: 60;
 }
 .navbar-container{
-  max-width: 1180px;
+  max-width: 1280px; /* augmenté de 1180 -> 1280 pour tenir plus d'items */
   margin: 0 auto;
   display:flex;
   align-items:center;
@@ -60,12 +60,12 @@ body {
 .nav-logo a{
   font-weight:700;
   white-space:nowrap;
-  font-size: clamp(1rem, 1.4vw, 1.15rem) !important;
+  font-size: clamp(1rem, 1.4vw, 1.12rem) !important; /* légèrement réduit au max pour éviter débordement */
   text-decoration:none;
 }
 .nav-signature{ display:inline-block; margin-left:.4rem; height:22px; }
 
-/* liens (desktop) : police volontairement plus grande et responsive */
+/* liens (desktop) : police un peu plus grande mais qui reste adaptative */
 .nav-links{
   display:flex;
   gap:0.9rem;
@@ -77,8 +77,8 @@ body {
 .nav-links li{ margin:0; }
 .nav-links a{
   display:inline-block;
-  padding:.6rem .85rem !important;
-  font-size: clamp(1.02rem, 1.6vw, 1.22rem) !important; /* plus grande sur desktop */
+  padding:.55rem .75rem !important; /* léger ajustement */
+  font-size: clamp(0.98rem, 1.4vw, 1.18rem) !important; /* compromis desktop/mobile */
   line-height:1;
   color: var(--nav-link-color);
   text-decoration:none;
@@ -97,14 +97,14 @@ body {
 /* accepter les deux classes utilisées par les scripts */
 .nav-links.open, .nav-links.show { display:flex !important; }
 
-/* MOBILE : menu hamburger (les étiquettes du menu auront une police confortable) */
+/* MOBILE : menu hamburger (les étiquettes du menu ont police confortable) */
 @media (max-width: 840px){
   .nav-logo a{ font-size: clamp(0.92rem, 3.6vw, 1.02rem) !important; max-width:160px; overflow:hidden; text-overflow:ellipsis; display:inline-block; vertical-align:middle; }
   .hamburger{ margin-left:auto; width:44px; height:38px; font-size:1.05rem; border-radius:.5rem; }
   .nav-links{ display:none; flex-direction:column; align-items:stretch; width:100%; gap:0; padding:0.25rem 0; }
   .nav-links.open, .nav-links.show { display:flex !important; }
 
-  /* lorsque le menu mobile est ouvert, augmenter légèrement la taille des libellés pour lisibilité tactile */
+  /* lorsque le menu mobile est ouvert, labels tactiles plus lisibles */
   .nav-links.open a, .nav-links.show a{
     font-size: clamp(1rem, 4.2vw, 1.12rem) !important;
     padding:.6rem .9rem !important;

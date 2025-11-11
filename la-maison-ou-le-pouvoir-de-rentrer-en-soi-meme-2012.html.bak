@@ -187,8 +187,6 @@
       .gallery-work img { height: 180px;}
     }
 
-    /* NAVBAR : styles centralisés dans css/style-modern.css
-       → suppression du CSS local pour éviter conflits et assurer identique sur toutes les pages */
 
     /* Eviter que la barre chevauche le contenu : espace au-dessus du contenu principal */
     .gallery-page { margin-top: calc(5rem + 0.8rem); } /* ajuste si nécessaire */

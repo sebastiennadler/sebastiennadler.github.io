@@ -62,7 +62,9 @@
       <button id="menu-toggle" aria-label="Ouvrir le menu" class="hamburger">&#9776;</button>
       <ul class="nav-links">
         <li><a href="index.html">Accueil</a></li>
-        <li><a href="galeries.html" class="active">Galeries</a></li>
+        <li><a href="galeries.html">Galeries</a></li>
+        <li><a href="videos.html">Vidéos</a></li>
+        <li><a href="publications.html">Publications</a></li>
         <li><a href="diaporama.html">Diaporama</a></li>
         <li><a href="apropos.html">À propos</a></li>
         <li><a href="contact.html">Contact</a></li>
@@ -126,10 +128,9 @@
   </div>
   
   <!-- ===== Pied de page commun à tout le site ===== -->
-  <footer>
-
-    <p>&copy; 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
-  </footer>
+<footer>
+  <p>© 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
+</footer>
   
   <!-- ===== Scripts spécifiques à la page ===== -->
   <script>

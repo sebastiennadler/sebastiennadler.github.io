@@ -79,6 +79,8 @@
       <ul class="nav-links">
         <li><a href="index.html">Accueil</a></li>
         <li><a href="galeries.html">Galeries</a></li>
+        <li><a href="videos.html">Vidéos</a></li>
+        <li><a href="publications.html">Publications</a></li>
         <li><a href="diaporama.html">Diaporama</a></li>
         <li><a href="apropos.html">À propos</a></li>
         <li><a href="contact.html">Contact</a></li>
@@ -92,9 +94,9 @@
     <div class="legal-container fade-in">
       <h1>Mentions légales</h1>
       <p>
-        <b>Responsable de la publication&nbsp;:</b> Ana Ruiz<br>
+        <b>Responsable de la publication&nbsp;:</b> Ana Ruiz Llamazares<br>
         <b>Contact&nbsp;:</b> <a href="mailto:anaruiz@exemple.com">anaruiz@exemple.com</a><br>
-        <b>Hébergement&nbsp;:</b> (À compléter selon ton hébergeur)<br>
+        <b>Hébergement&nbsp;:</b> (github)<br>
       </p>
       <h2>Propriété intellectuelle</h2>
       <p>
@@ -108,17 +110,18 @@
       </p>
       <h2>Crédits</h2>
       <p>
-        Création, textes et œuvres : Ana Ruiz<br>
-        (Tu peux ajouter le nom de développeur, photographe, etc., si besoin)
+        Création, textes et œuvres : Ana Ruiz Llamazares<br>
+        Développeur : Sébastien Nadler 
+        Vidéos : Philippe Raud
+        Photographe : Philippe Moreau
       </p>
     </div>
   </main>
   
   <!-- ===== Pied de page commun à tout le site ===== -->
-  <footer>
-
-    <p>&copy; 2025 Ana Ruiz. Tous droits réservés.</p>
-  </footer>
+<footer>
+  <p>© 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
+</footer>
   
   <!-- ===== Scripts spécifiques à la page ===== -->
   <script>
