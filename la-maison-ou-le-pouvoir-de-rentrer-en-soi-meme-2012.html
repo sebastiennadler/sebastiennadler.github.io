@@ -511,7 +511,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
   imgs.forEach(function(img){
     img.style.cursor = 'zoom-in';
-    // rendre cliquable via clavier
     img.setAttribute('tabindex', img.getAttribute('tabindex') || '0');
     img.addEventListener('click', function(e){
       var src = img.getAttribute('data-large') || img.src;
@@ -527,6 +526,26 @@ document.addEventListener('DOMContentLoaded', function(){
     if (e.target === lightbox) closeLightbox();
   });
   lbClose.addEventListener('click', closeLightbox);
+
+  // permettre fermeture en cliquant SUR l'image elle-même + accès clavier
+  if (lbImg) {
+    lbImg.setAttribute('tabindex','0'); // focusable
+    lbImg.addEventListener('click', function(e){
+      // fermer la lightbox quand l'utilisateur clique sur l'image
+      closeLightbox();
+    });
+    lbImg.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); closeLightbox(); }
+    });
+    // pointerdown pour réponse tactile immédiate (mobile)
+    lbImg.addEventListener('pointerdown', function(e){
+      if (e.pointerType === 'touch') {
+        // fermer au toucher (évite délai click)
+        e.preventDefault();
+        closeLightbox();
+      }
+    }, {passive:false});
+  }
 
   // fermer avec Esc
   document.addEventListener('keydown', function(e){
