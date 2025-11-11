@@ -300,6 +300,8 @@ footer a:hover {
 @media (max-width: 900px) {
   .hero { padding: 6vw 4vw; }
   .hero h1 { font-size: 2rem; }
+
+  /* menu mobile : conteneur centré et libellés centrés / non tronqués */
   .nav-links {
     display: none;
     position: absolute;
@@ -311,10 +313,18 @@ footer a:hover {
     gap: 0;
     padding: 1em 0;
     z-index: 4000;
+    text-align: center;
   }
-  .nav-links.show {
-    display: flex;
+  .nav-links li { width: 100%; }
+  .nav-links a {
+    display: block;
+    width: 100%;
+    text-align: center !important;
+    white-space: normal !important; /* autorise l'enroulement au lieu de tronquer */
+    padding: .8rem 1rem;
+    box-sizing: border-box;
   }
+  .nav-links.show { display: flex; }
   .hamburger {
     display: block;
     background: none;
@@ -324,37 +334,37 @@ footer a:hover {
     cursor: pointer;
     margin-left: 1em;
   }
-  .navbar-container {
-    padding: 0.5rem 2vw;
-  }
+  .navbar-container { padding: 0.5rem 2vw; }
 }
-@media (max-width: 700px) {
-  .navbar { padding: 0.7rem 2vw; }
-  .nav-links { gap: 0.6em;}
-  .hero { padding: 9vw 2vw;}
-}
+
 @media (max-width: 600px) {
-  .navbar { flex-wrap: wrap; }
-  .nav-logo a { font-size: 1.2rem; }
+  .navbar { padding: 0.7rem 2vw; }
+  .nav-links { gap: 0.6em; }
+  .hero { padding: 9vw 2vw; }
+
+  /* menu mobile compact (pops over) : centrage et wrapping */
   .nav-links {
     display: none;
     flex-direction: column;
     gap: 0.2em;
     background: rgba(28, 28, 31, 0.98);
     position: absolute;
-    top: 50px; right: 4vw; padding: 1.4em 1.6em; border-radius: 18px; box-shadow: 0 4px 28px #2c185d38;
+    top: 50px;
+    right: 4vw;
+    padding: 1.4em 1.6em;
+    border-radius: 18px;
+    box-shadow: 0 4px 28px #2c185d38;
+    text-align: center;
   }
   .nav-links.show { display: flex; }
-  .hamburger { display: block;}
-}
-@media (max-width: 600px) {
-  .lightbox-close { top: 10px; right: 14px; font-size: 2.2rem; }
-  .lightbox-img { max-width: 99vw; max-height: 78vh; }
+  .nav-links a { text-align: center !important; white-space: normal !important; display: block; width: 100%; padding: .7rem 1rem; }
+
+  .hamburger { display: block; }
 }
 @media (max-width: 420px) {
   .hero h1 { font-size: 1.08rem; }
-  .hero p { font-size: 0.92rem;}
-  .btn, .glass-btn { font-size: 0.91rem; padding: 0.7rem 1rem;}
+  .hero p { font-size: 0.92rem; }
+  .btn, .glass-btn { font-size: 0.91rem; padding: 0.7rem 1rem; }
 }
 .lightbox {
   display: none;
