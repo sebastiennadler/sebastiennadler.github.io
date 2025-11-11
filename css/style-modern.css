@@ -13,19 +13,33 @@ body {
   box-sizing: border-box;
   color: #e9ecef;
 }
+
+/* Background slideshow / image d'accueil — garde fallback gradient si l'image manque */
 .background-slideshow {
   position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
+  inset: 0; /* top:0; right:0; bottom:0; left:0; */
   z-index: 0;
-  background: url('../img/accueil.jpg') no-repeat center center/cover;
+  background-image: url("../img/accueil.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  /* fallback visuel si l'image est absente */
+  background-color: #222;
   filter: brightness(0.52) blur(1.2px) grayscale(10%);
   transition: background 1s, filter 0.8s;
   animation: bgFade 22s infinite alternate;
+  display: block;
 }
+
+/* si tu veux forcer l'affichage malgré overrides potentiels */
+body > .background-slideshow { z-index: 0; position: fixed; }
+
+/* keyframes existants */
 @keyframes bgFade {
-  0% { filter: brightness(0.52) blur(1.2px) grayscale(10%);}
-  100% { filter: brightness(0.57) blur(0.7px) grayscale(5%);}
+  0% { filter: brightness(0.52) blur(1.2px) grayscale(10%); }
+  100% { filter: brightness(0.57) blur(0.7px) grayscale(5%); }
 }
+
 body {
   position: relative;
   z-index: 1;
