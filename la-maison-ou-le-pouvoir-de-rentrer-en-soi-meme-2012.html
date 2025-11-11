@@ -208,6 +208,9 @@
     .nav-links a { display:inline-block; padding:.6rem .75rem; font-size:1.04rem; line-height:1; text-decoration:none; border-radius:.35rem; }
     @media (max-width:840px) {
       .nav-links a { font-size:0.98rem; padding:.45rem .5rem; }
+      /* Force le menu mobile masqué par défaut et n'affiche que si .open ou .show est présent */
+      .nav-links { display: none !important; flex-direction: column; align-items: center; text-align: center; width:100%; }
+      .nav-links.open, .nav-links.show { display: flex !important; }
     }
 
     /* Eviter que la barre chevauche le contenu : espace au-dessus du contenu principal */
@@ -438,61 +441,53 @@
       // fade-in
       document.querySelectorAll('.fade-in').forEach(function(el) { el.classList.add('visible'); });
 
-      // menu toggle
-      var menuBtn = document.getElementById('menu-toggle');
-      if (menuBtn) {
-        menuBtn.addEventListener('click', function(){
-          var nav = document.querySelector('.nav-links');
-          if (nav) nav.classList.toggle('show');
+      // menu toggle (mobile) : gère .open et .show, aria, fermeture au clic hors menu et au resize
+      (function(){
+        var menuBtn = document.getElementById('menu-toggle');
+        var nav = document.querySelector('.nav-links');
+        if (!menuBtn || !nav) return;
+        menuBtn.setAttribute('aria-expanded','false');
+
+        function closeNav() {
+          nav.classList.remove('open');
+          nav.classList.remove('show');
+          menuBtn.setAttribute('aria-expanded','false');
+          document.body.classList.remove('menu-open');
+        }
+        function openNav() {
+          nav.classList.add('open');
+          nav.classList.add('show');
+          menuBtn.setAttribute('aria-expanded','true');
+          document.body.classList.add('menu-open');
+        }
+        menuBtn.addEventListener('click', function(e){
+          e.stopPropagation();
+          if (nav.classList.contains('open') || nav.classList.contains('show')) closeNav(); else openNav();
         });
-      }
-
-      // description extensible : clic + clavier (Entrée / Espace) + bouton Fermer
-      var desc = document.getElementById('gallery-desc');
-      var full = document.getElementById('gallery-desc-full');
-      var closeBtn = document.getElementById('gallery-desc-close');
-      if (desc && full) {
-        // collapsed state (hidden with display:none initially)
-        full.style.display = 'none';
-        full.classList.remove('open');
-
-        function openDesc() {
-          // make visible, then trigger transition
-          full.style.display = 'block';
-          // small delay so transition can run
-          requestAnimationFrame(function(){
-            full.classList.add('open');
-            full.setAttribute('aria-hidden', 'false');
-            desc.setAttribute('aria-expanded', 'true');
-            if (closeBtn) closeBtn.focus();
-          });
-        }
-
-        function closeDesc() {
-          // start closing transition
-          full.classList.remove('open');
-          full.setAttribute('aria-hidden', 'true');
-          desc.setAttribute('aria-expanded', 'false');
-          // after transition duration, hide completely
-          setTimeout(function(){
-            full.style.display = 'none';
-            // restore focus to summary
-            desc.focus();
-          }, 280); // doit être légèrement supérieur à la transition en CSS (0.26s)
-        }
-
-        function toggleDesc() { if (full.classList.contains('open')) closeDesc(); else openDesc(); }
-
-        desc.addEventListener('click', toggleDesc);
-        desc.addEventListener('keydown', function(e){
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleDesc(); }
+        // fermer si on clique en dehors du menu (utile en mobile)
+        document.addEventListener('click', function(e){
+          if (window.matchMedia('(max-width:840px)').matches) {
+            if (nav.classList.contains('open') && !nav.contains(e.target) && e.target !== menuBtn) closeNav();
+          }
         });
-        if (closeBtn) {
-          closeBtn.addEventListener('click', function(e){ e.stopPropagation(); closeDesc(); });
-          closeBtn.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); closeDesc(); } });
-        }
-      }
-    });
+        // fermer au redimensionnement si on passe en desktop pour éviter état incohérent
+        window.addEventListener('resize', function(){
+          if (!window.matchMedia('(max-width:840px)').matches) {
+            // sur desktop, laisser le nav visible via CSS ; retire les classes mobile
+            nav.classList.remove('open');
+            nav.classList.remove('show');
+            menuBtn.setAttribute('aria-expanded','false');
+            document.body.classList.remove('menu-open');
+          } else {
+            // petite sécurité : masquer par défaut quand on revient en mobile
+            nav.classList.remove('open');
+            nav.classList.remove('show');
+            menuBtn.setAttribute('aria-expanded','false');
+            document.body.classList.remove('menu-open');
+          }
+        });
+      })();
+     });
   </script>
 
   <div id="lightbox" class="lightbox-overlay" aria-hidden="true" role="dialog" aria-modal="true">
