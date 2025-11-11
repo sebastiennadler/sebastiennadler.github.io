@@ -11,6 +11,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>La maison ou le pouvoir de rentrer en soi-même (2012) - Ana Ruiz</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style-modern.css">
   <style>
     body { background: #151516 !important; }
@@ -32,10 +33,85 @@
     .gallery-desc {
       color: #cec9c4;
       font-size: 1.09rem;
-      margin: 0 0 2.2em 0;
+      margin: 0 auto 1.2rem auto; /* espace supplémentaire sous la phrase */
+      max-width: 880px;           /* limite largeur et évite débordement */
       text-align: center;
       font-style: italic;
+      cursor: pointer;
+      position: relative;
+      outline: none;
+      display: block;             /* bloc plein, empêche chevauchement */
+      padding: .45rem .9rem;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.02);
+      transition: background .18s, transform .12s;
+      -webkit-appearance: none;
+      text-decoration: none;
+      line-height:1.3;
     }
+    /* indicateur placé après le texte, non absolu (ne force pas débordement) */
+    .gallery-desc::after {
+      content: " ▾ En savoir plus";
+      display: inline-block;
+      margin-left: .45rem;
+      font-size: 0.88rem;
+      color: #bfb6ad;
+      opacity: 0.95;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    /* petite amélioration visuelle pour montrer que c'est cliquable */
+    .gallery-desc:hover,
+    .gallery-desc:focus {
+      background: rgba(255,255,255,0.045);
+      transform: translateY(-1px);
+      outline: 2px solid rgba(255,255,255,0.05);
+    }
+    /* si malgré tout il reste du texte posé sous la phrase, forcer séparation */
+    .gallery-works { margin-top: 0.8rem; }
+
+    /* Bloc étendu : fond, ombre et priorité d'affichage */
+    .expanded-text {
+      position: relative;
+      z-index: 30;                    /* au-dessus des éléments fixes */
+      background: rgba(20,20,22,0.96);/* fond opaque pour éviter superposition visuelle */
+      border-radius: 12px;
+      padding: 1rem .9rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      overflow: hidden;
+      color: #d7d2cf;
+      text-align: justify;
+      margin: 0 auto;
+      max-width: 780px;
+      box-sizing: border-box;
+      display: none;                  /* caché par défaut de façon sûre */
+      opacity: 0;
+      transform-origin: top center;
+      transform: translateY(-6px);
+      transition: opacity 0.26s ease, transform 0.26s ease;
+    }
+    .expanded-text.open {
+      display: block;                 /* rendu visible quand on ouvre */
+      opacity: 1;
+      transform: translateY(0);
+      margin-top: 1rem;
+    }
+
+    /* bouton Fermer */
+    .expanded-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 0;
+      color: #ece3de;
+      padding: .18rem .5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      display: none;
+    }
+    .expanded-text.open .expanded-close { display: block; }
     .gallery-works {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -110,22 +186,131 @@
       .gallery-works { grid-template-columns: 1fr;}
       .gallery-work img { height: 180px;}
     }
-  </style>
 
-<style>
-/* --- Correctifs mobile: signature visible, hamburger réduit, titres centrés --- */
-@media (max-width: 840px){
-  /* Afficher la signature en mobile et la réduire */
-  .nav-signature{display:block; height:20px; width:auto; margin-left:.25rem; opacity:.95}
-  .nav-signature img{height:20px; width:auto; display:block; opacity:.95}
-  /* Bouton hamburger plus petit et mieux clicable */
-  .hamburger{margin-left:auto; width:40px; height:36px; padding:0; display:grid; place-items:center; font-size:1rem; line-height:1; border-radius:.5rem}
-  /* Menu mobile: centrer les titres et l'alignement */
-  .nav-links{display:none; flex-direction:column; align-items:center; text-align:center}
-  .nav-links.open{display:flex}
-  .nav-links a{display:block; padding:.6rem 0; font-size:1.05rem}
-}
-</style>
+    /* NAVBAR : styles centralisés dans css/style-modern.css
+       → suppression du CSS local pour éviter conflits et assurer identique sur toutes les pages */
+
+    /* Eviter que la barre chevauche le contenu : espace au-dessus du contenu principal */
+    .gallery-page { margin-top: calc(5rem + 0.8rem); } /* ajuste si nécessaire */
+
+    /* signature auteur : police manuscrite */
+    .author-signature {
+      font-family: "Great Vibes", cursive;
+      font-size: 1.6rem;                 /* un peu plus grand pour la lisibilité */
+      color: #e6dccf;
+      display: inline-block;
+      margin-top: .45rem;
+      line-height: 1;
+      letter-spacing: 0.8px;             /* espacement entre caractères */
+      word-spacing: 0.5rem;              /* espace entre les mots/parties du nom */
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+    .author-signature .sig-part { display:inline-block; }
+    .author-signature .sig-sep { width:.5rem; display:inline-block; }
+
+    /* Styles pour le texte étendu */
+    .expanded-text p {
+      text-align: justify;
+      text-justify: inter-word;
+      -webkit-hyphens: auto;
+      -ms-hyphens: auto;
+      hyphens: auto;
+      margin: 0 0 1rem;
+      line-height: 1.7;
+      color: #d7d2cf;
+      font-size: 1rem;
+    }
+    .expanded-text blockquote {
+      font-style: italic;
+      margin: 1rem 0;
+      color: #e6dccf;
+      border-left: 3px solid rgba(255,255,255,0.04);
+      padding-left: 1rem;
+    }
+    .expanded-text .source {
+      text-align: right;
+      font-style: italic;
+      color: #bfb6ad;
+      margin-top: 0.6rem;
+      font-size: 0.95rem;
+    }
+
+    /* Lightbox fullscreen (affiche l'image entière, pas de crop) */
+    .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(2,2,4,0.92);
+      z-index: 1100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .22s ease;
+    }
+    .lightbox-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .lightbox-inner {
+      width: 100%;
+      height: 100%;
+      max-width: 100vw;
+      max-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .lightbox-inner img {
+      max-width: calc(100vw - 40px);
+      max-height: calc(100vh - 40px);
+      width: auto;
+      height: auto;
+      object-fit: contain; /* garantit que l'image apparaisse entière */
+      display: block;
+      /* enlever arrondi pour respecter l'image entière et éviter artefacts */
+      border-radius: 0;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.6);
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Focus styling : retirer le rectangle natif (bleu) et proposer un anneau discret */
+    .lightbox-close:focus,
+    .lightbox-inner img:focus,
+    #lightbox-close:focus {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.06);
+      border-radius: 6px;
+    }
+    /* ne pas laisser la miniature afficher le focus natif bleu */
+    .gallery-work img { outline: none; -webkit-tap-highlight-color: transparent; }
+    .gallery-work img:focus { box-shadow: 0 0 0 3px rgba(255,255,255,0.04); border-radius:4px; }
+
+    .lightbox-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 0;
+      color: #f4efe9;
+      padding: .35rem .5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      backdrop-filter: blur(2px);
+    }
+    .lightbox-caption {
+      margin-top: .6rem;
+      color: #cfc6bd;
+      font-size: .95rem;
+      text-align: center;
+    }
+    @media (max-width:600px){
+      .lightbox-close{ top:8px; right:8px; font-size:.95rem; padding:.3rem .45rem;}
+    }
+  </style>
 
 </head>
 
@@ -141,7 +326,9 @@
       <button id="menu-toggle" aria-label="Ouvrir le menu" class="hamburger">&#9776;</button>
       <ul class="nav-links">
         <li><a href="index.html">Accueil</a></li>
-        <li><a href="galeries.html" class="active">Galeries</a></li>
+        <li><a href="galeries.html">Galeries</a></li>
+        <li><a href="videos.html">Vidéos</a></li>
+        <li><a href="publications.html">Publications</a></li>
         <li><a href="diaporama.html">Diaporama</a></li>
         <li><a href="apropos.html">À propos</a></li>
         <li><a href="contact.html">Contact</a></li>
@@ -154,32 +341,56 @@
 
     <div class="gallery-page fade-in">
       <div class="gallery-title">La maison ou le pouvoir de rentrer en soi-même (2012)</div>
-      <div class="gallery-desc">
-        Une exploration intérieure, un voyage au cœur de la maison, à la recherche de soi-même.
+      <div id="gallery-desc" class="gallery-desc" tabindex="0" role="button" aria-expanded="false" title="Cliquer pour développer">
+        La maison est-elle le reflet de notre personnalité qui se construit peu à peu au fil des ans ? Le geste transmis de génération en génération ? 
+        </br>Qui, de nous ou de la maison reflète l'autre ? Qui construit et protège l'autre ? 
+        
+      </div>
+      <!-- remplacer le contenu actuel de #gallery-desc-full par : -->
+      <div id="gallery-desc-full" class="expanded-text" aria-hidden="true">
+        <button id="gallery-desc-close" class="expanded-close" aria-label="Fermer la description">✕</button>
+
+        <p>
+          Parce qu’elle est indissociablement matérielle et immatérielle — maison où l’on vit et maison que l’on porte au fond de soi — la maison nous habite autant que nous l’habitons. C’est pourquoi la perdre revient aussi à se perdre soi‑même : rester enfermé dehors et en dehors de soi, en exil, dépossédé de l’espace intime de vie et du pouvoir de rentrer en soi‑même, séparé de soi et des autres comme un fantôme hanté par la maison disparue.
+        </p>
+
+        <p>
+          Un vieux conte traditionnel nous enseigne comment, grâce à notre travail et pourvu que nous soyons prévoyants, nous n’aurons rien à craindre pour la sécurité de la maisonnée, car nous choisirons sagement entre la maison de paille et de ciment, capable de braver le souffle du loup qui peut aisément balayer la maison de paille et secouer fortement la maison de bois qu’elle finit par dégringoler. Mais le loup est devenu bien pire symbole des dangers qui menacent les foyers. Quelle sorte de maison pourra nous protéger, sans faillir, des tempêtes qui soufflent sur notre monde et qui, financièrement, précipitent dans la ruine des populations entières ? Le conte ne le dit pas.
+        </p>
+
+        <p>
+          Sur le fil qui relie entre elles toutes les maisons du monde avance opiniâtrement en vacillant une frêle silhouette. Serait‑ce un hidalgo funambule que la force d’un noble et généreux idéal empêche de tomber et pousse envers et contre tout à aller de l’avant ? Cherche‑t‑il, de maison en maison, une porte ouverte sur un autre monde où toute maison est le centre de l’univers et où aucune ne sera jamais détruite ? Nous marchons tous sur un fil et, de là‑haut, si nous regardons bien, si nous regardons penchés à la fenêtre du cœur,
+        </p>
+        <p><em>Germinal Arcal Palacio</em></p>
+        <blockquote>
+          « (…) toutes les maisons apparaissent comme des coques de bateaux joliment colorées sur la mer immense et bleue de l’univers. Fragiles, les petites voiles triangulaires et le mât pointé vers le ciel, elles disent en même temps notre enfermement et notre légèreté, notre gravité et notre vanité. »
+        </blockquote>
+
+        <div class="source">(Lydia Devos, La Maison, Le Seuil)</div>
       </div>
       <div class="gallery-works">
 
         <div class="gallery-work">
-          <img src="img/maison-chrysalide.jpg" alt="Maison chrysalide">
-          <div class="gallery-work-title">Maison chrysalide</div>
-          <div class="gallery-work-desc"></div>
-        </div>
-
-        <div class="gallery-work">
-          <img src="img/maison-sacree.jpg" alt="Maison sacrée">
+          <img src="img/la-maison/maison-sacree.jpg" alt="Maison sacrée" tabindex="0" data-large="img/la-maison/maison-sacree.jpg">
           <div class="gallery-work-title">Maison sacrée</div>
           <div class="gallery-work-desc"></div>
         </div>
 
         <div class="gallery-work">
-          <img src="img/maison-paradis-perdu.jpg" alt="Maison paradis perdu">
-          <div class="gallery-work-title">Maison paradis perdu</div>
+          <img src="img/la-maison/maison-floride.jpg" alt="Maison Floride" tabindex="0" data-large="img/la-maison/maison-floride.jpg">
+          <div class="gallery-work-title">Maison Floride</div>
           <div class="gallery-work-desc"></div>
         </div>
 
         <div class="gallery-work">
-          <img src="img/maison-floride.jpg" alt="Maison Floride">
-          <div class="gallery-work-title">Maison Floride</div>
+          <img src="img/maison-temple.jpg" alt="Maison temple" tabindex="0" data-large="img/maison-temple.jpg">
+          <div class="gallery-work-title">Maison temple</div>
+          <div class="gallery-work-desc"></div>
+        </div>
+
+        <div class="gallery-work">
+          <img src="img/maison-palais-prison.jpg" alt="Maison palais prison" tabindex="0" data-large="img/maison-palais-prison.jpg">
+          <div class="gallery-work-title">Maison palais prison</div>
           <div class="gallery-work-desc"></div>
         </div>
 
@@ -196,60 +407,133 @@
   </main>
   
   <!-- ===== Pied de page commun à tout le site ===== -->
-  <footer>
-
-    <p>&copy; 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
-  </footer>
+<footer>
+  <p>© 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
+</footer>
   
   <!-- ===== Scripts spécifiques à la page ===== -->
   <script>
 
     document.addEventListener("DOMContentLoaded", function() {
-      document.querySelectorAll('.fade-in').forEach(function(el) {
-        el.classList.add('visible');
-      });
-      document.getElementById('menu-toggle').onclick = function() {
-        document.querySelector('.nav-links').classList.toggle('show');
-      };
-    });
-  </script>
-<div id="lightbox" class="lightbox">
-  <span class="lightbox-close" id="lightbox-close">&times;</span>
-  <img class="lightbox-img" id="lightbox-img" src="" alt="Œuvre en plein écran">
-</div>
+      // fade-in
+      document.querySelectorAll('.fade-in').forEach(function(el) { el.classList.add('visible'); });
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Ouvre lightbox au clic
-  document.querySelectorAll('.gallery-work img').forEach(function(img) {
-    img.addEventListener('click', function() {
-      var lightbox = document.getElementById('lightbox');
-      var lightboxImg = document.getElementById('lightbox-img');
-      lightboxImg.src = this.src;
-      lightbox.style.display = 'flex';
+      // menu toggle (mobile) : gère .open et .show, aria, fermeture au clic hors menu et au resize
+      (function(){
+        var menuBtn = document.getElementById('menu-toggle');
+        var nav = document.querySelector('.nav-links');
+        if (!menuBtn || !nav) return;
+        menuBtn.setAttribute('aria-expanded','false');
+
+        function closeNav() {
+          nav.classList.remove('open');
+          nav.classList.remove('show');
+          menuBtn.setAttribute('aria-expanded','false');
+          document.body.classList.remove('menu-open');
+        }
+        function openNav() {
+          nav.classList.add('open');
+          nav.classList.add('show');
+          menuBtn.setAttribute('aria-expanded','true');
+          document.body.classList.add('menu-open');
+        }
+        menuBtn.addEventListener('click', function(e){
+          e.stopPropagation();
+          if (nav.classList.contains('open') || nav.classList.contains('show')) closeNav(); else openNav();
+        });
+        // fermer si on clique en dehors du menu (utile en mobile)
+        document.addEventListener('click', function(e){
+          if (window.matchMedia('(max-width:840px)').matches) {
+            if (nav.classList.contains('open') && !nav.contains(e.target) && e.target !== menuBtn) closeNav();
+          }
+        });
+        // fermer au redimensionnement si on passe en desktop pour éviter état incohérent
+        window.addEventListener('resize', function(){
+          if (!window.matchMedia('(max-width:840px)').matches) {
+            // sur desktop, laisser le nav visible via CSS ; retire les classes mobile
+            nav.classList.remove('open');
+            nav.classList.remove('show');
+            menuBtn.setAttribute('aria-expanded','false');
+            document.body.classList.remove('menu-open');
+          } else {
+            // petite sécurité : masquer par défaut quand on revient en mobile
+            nav.classList.remove('open');
+            nav.classList.remove('show');
+            menuBtn.setAttribute('aria-expanded','false');
+            document.body.classList.remove('menu-open');
+          }
+        });
+      })();
+     });
+  </script>
+
+  <div id="lightbox" class="lightbox-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="lightbox-inner" role="document">
+      <button id="lightbox-close" class="lightbox-close" aria-label="Fermer la vue plein écran">✕</button>
+      <div class="lightbox-content">
+        <img id="lightbox-img" src="" alt="">
+        <div id="lightbox-caption" class="lightbox-caption" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+document.addEventListener('DOMContentLoaded', function(){
+  var imgs = document.querySelectorAll('.gallery-work img');
+  var lightbox = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lightbox-img');
+  var lbCaption = document.getElementById('lightbox-caption');
+  var lbClose = document.getElementById('lightbox-close');
+
+  if (!lightbox || !lbImg) return;
+
+  function openLightbox(src, alt){
+    lbImg.src = src;
+    lbImg.alt = alt || '';
+    lbCaption.textContent = alt || '';
+    lbCaption.setAttribute('aria-hidden', alt ? 'false' : 'true');
+    document.documentElement.setAttribute('data-lightbox-open','true');
+    document.body.style.overflow = 'hidden';
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden','false');
+    lbClose.focus();
+  }
+
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden','true');
+    // délai pour laisser la transition se terminer avant de réactiver le scroll
+    setTimeout(function(){
+      document.body.style.overflow = '';
+      document.documentElement.removeAttribute('data-lightbox-open');
+      lbImg.src = '';
+    }, 220);
+  }
+
+  imgs.forEach(function(img){
+    img.style.cursor = 'zoom-in';
+    // rendre cliquable via clavier
+    img.setAttribute('tabindex', img.getAttribute('tabindex') || '0');
+    img.addEventListener('click', function(e){
+      var src = img.getAttribute('data-large') || img.src;
+      openLightbox(src, img.alt || '');
+    });
+    img.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); var src = img.getAttribute('data-large') || img.src; openLightbox(src, img.alt || ''); }
     });
   });
-  // Ferme sur croix
-  document.getElementById('lightbox-close').onclick = function() {
-    document.getElementById('lightbox').style.display = 'none';
-    document.getElementById('lightbox-img').src = '';
-  };
-  // Ferme sur clic hors image
-  document.getElementById('lightbox').addEventListener('click', function(e) {
-    if (e.target === this) {
-      this.style.display = 'none';
-      document.getElementById('lightbox-img').src = '';
-    }
+
+  // fermer en cliquant sur l'overlay (sauf si on clique sur l'image)
+  lightbox.addEventListener('click', function(e){
+    if (e.target === lightbox) closeLightbox();
   });
-  // Ferme sur ESC
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      document.getElementById('lightbox').style.display = 'none';
-      document.getElementById('lightbox-img').src = '';
-    }
+  lbClose.addEventListener('click', closeLightbox);
+
+  // fermer avec Esc
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
   });
+
 });
 </script>
-
 </body>
 </html>

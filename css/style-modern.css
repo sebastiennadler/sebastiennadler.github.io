@@ -31,6 +31,96 @@ body {
   z-index: 1;
 }
 
+/* ===== NAVBAR UNIFIÉE (appliquée à toutes les pages) ===== */
+:root{
+  --nav-padding-vertical: 0.9rem;
+  --nav-padding-horizontal: 1rem;
+  --nav-bg: transparent;
+  --nav-link-color: inherit;
+  --nav-link-focus: rgba(255,255,255,0.06);
+}
+
+/* conteneur */
+.navbar{
+  padding: var(--nav-padding-vertical) var(--nav-padding-horizontal) !important;
+  background: var(--nav-bg) !important;
+  position: relative;
+  z-index: 60;
+}
+.navbar-container{
+  max-width: 1180px;
+  margin: 0 auto;
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  padding:0 1rem;
+}
+
+/* logo / signature */
+.nav-logo a{
+  font-weight:700;
+  white-space:nowrap;
+  font-size: clamp(1rem, 1.4vw, 1.15rem) !important;
+  text-decoration:none;
+}
+.nav-signature{ display:inline-block; margin-left:.4rem; height:22px; }
+
+/* liens (desktop) : police volontairement plus grande et responsive */
+.nav-links{
+  display:flex;
+  gap:0.9rem;
+  margin-left:auto;
+  align-items:center;
+  list-style:none;
+  padding:0;
+}
+.nav-links li{ margin:0; }
+.nav-links a{
+  display:inline-block;
+  padding:.6rem .85rem !important;
+  font-size: clamp(1.02rem, 1.6vw, 1.22rem) !important; /* plus grande sur desktop */
+  line-height:1;
+  color: var(--nav-link-color);
+  text-decoration:none;
+  border-radius:.35rem;
+  transition: background .12s, transform .08s;
+}
+
+/* focus / hover accessible */
+.nav-links a:focus,
+.nav-links a:hover{
+  background: var(--nav-link-focus);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(255,255,255,0.03);
+}
+
+/* accepter les deux classes utilisées par les scripts */
+.nav-links.open, .nav-links.show { display:flex !important; }
+
+/* MOBILE : menu hamburger (les étiquettes du menu auront une police confortable) */
+@media (max-width: 840px){
+  .nav-logo a{ font-size: clamp(0.92rem, 3.6vw, 1.02rem) !important; max-width:160px; overflow:hidden; text-overflow:ellipsis; display:inline-block; vertical-align:middle; }
+  .hamburger{ margin-left:auto; width:44px; height:38px; font-size:1.05rem; border-radius:.5rem; }
+  .nav-links{ display:none; flex-direction:column; align-items:stretch; width:100%; gap:0; padding:0.25rem 0; }
+  .nav-links.open, .nav-links.show { display:flex !important; }
+
+  /* lorsque le menu mobile est ouvert, augmenter légèrement la taille des libellés pour lisibilité tactile */
+  .nav-links.open a, .nav-links.show a{
+    font-size: clamp(1rem, 4.2vw, 1.12rem) !important;
+    padding:.6rem .9rem !important;
+    text-align:left;
+  }
+}
+
+/* très petits écrans : compacter sans perdre lisibilité */
+@media (max-width: 380px){
+  .nav-logo a{ max-width:120px; font-size:0.88rem !important; }
+  .nav-links a{ font-size:0.94rem !important; padding:.42rem .7rem !important; }
+}
+
+/* garantir priorité sur styles inline sur certaines pages */
+.navbar, .nav-links a { -webkit-font-smoothing:antialiased; }
+
 /* ==== Barre de navigation ==== */
 .navbar {
   width: 100vw;
