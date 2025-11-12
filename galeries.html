@@ -19,7 +19,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 2.4em 2.2em;
       max-width: 1000px;
-      margin: 4rem auto 2rem auto;
+      margin: 1.2rem auto 2rem auto; /* réduit l'espace au-dessus du titre */
       padding: 0 1vw;
     }
     .gallery-card {
@@ -315,6 +315,10 @@
     }
     /* si des pages utilisent margin-top, neutraliser pour éviter doublon */
     .gallery-page { margin-top: 0 !important; }
+    .gallery-list h1 {
+      margin-top: 0.2rem; /* réduit l'écart entre la navbar (padding-top) et le titre */
+      margin-bottom: 0.8rem;
+    }
   </style>
 </head>
 <body>
