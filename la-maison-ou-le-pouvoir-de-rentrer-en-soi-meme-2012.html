@@ -17,8 +17,10 @@
     body { background: #151516 !important; }
     .gallery-page {
       max-width: 1000px;
-      margin: 5rem auto 3rem auto;
+      margin: 0 auto 3rem auto;
       padding: 0 1vw;
+      /* espace au-dessus calculé à partir de la hauteur réelle de la navbar */
+      margin-top: calc(var(--site-nav-offset) + 0.8rem);
     }
     .gallery-title {
       font-family: 'Playfair Display', serif;
@@ -191,8 +193,10 @@
     }
 
 
-    /* Eviter que la barre chevauche le contenu : espace au-dessus du contenu principal */
-    .gallery-page { margin-top: calc(5rem + 0.8rem); } /* ajuste si nécessaire */
+    /* Eviter que la barre chevauche le contenu : garde compatibilité */
+-  .gallery-page { margin-top: calc(5rem + 0.8rem); } /* ajuste si nécessaire */
++  /* la variable CSS --site-nav-offset garantit que le contenu commence sous la navbar */
++  .gallery-page { margin-top: calc(var(--site-nav-offset) + 0.8rem); } /* ajustable si nécessaire */
 
     /* signature auteur : police manuscrite */
     .author-signature {
