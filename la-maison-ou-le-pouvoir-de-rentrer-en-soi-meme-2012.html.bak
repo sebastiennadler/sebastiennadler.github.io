@@ -48,6 +48,9 @@
       -webkit-appearance: none;
       text-decoration: none;
       line-height:1.3;
+      touch-action: manipulation; /* priorité aux taps, évite gestures indésirables */
+      -webkit-tap-highlight-color: transparent;
+      z-index: 40; /* au-dessus d'éléments éventuels */
     }
     /* indicateur placé après le texte, non absolu (ne force pas débordement) */
     .gallery-desc::after {
@@ -314,25 +317,24 @@
 
 <body>
   <!-- ===== Barre de navigation principale ===== -->
-
-  <nav class="navbar">
-    <div class="navbar-container">
-      <div class="nav-logo">
-        <a href="index.html">Ana Ruiz</a>
-        <img src="img/signature.png" alt="Signature Ana Ruiz" class="nav-signature">
-      </div>
-      <button id="menu-toggle" aria-label="Ouvrir le menu" class="hamburger">&#9776;</button>
-      <ul class="nav-links">
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="galeries.html">Galeries</a></li>
-        <li><a href="videos.html">Vidéos</a></li>
-        <li><a href="publications.html">Publications</a></li>
-        <li><a href="diaporama.html">Diaporama</a></li>
-        <li><a href="apropos.html">À propos</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="nav-logo">
+      <a href="index.html">Ana Ruiz</a>
+      <img src="img/signature.png" alt="Signature Ana Ruiz" class="nav-signature">
     </div>
-  </nav>
+    <button id="menu-toggle" aria-label="Ouvrir le menu" class="hamburger">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="galeries.html">Galeries</a></li>
+      <li><a href="videos.html">Vidéos</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="diaporama.html">Diaporama</a></li>
+      <li><a href="apropos.html">À propos</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
   
   <!-- ===== Contenu principal de la page ===== -->
   <main>
@@ -482,9 +484,12 @@ document.addEventListener('DOMContentLoaded', function(){
   var lbCaption = document.getElementById('lightbox-caption');
   var lbClose = document.getElementById('lightbox-close');
 
+  var suppressOpen = false; // empêche réouverture immédiate après fermeture
+
   if (!lightbox || !lbImg) return;
 
   function openLightbox(src, alt){
+    if (suppressOpen) return; // bloquer réouverture temporaire
     lbImg.src = src;
     lbImg.alt = alt || '';
     lbCaption.textContent = alt || '';
@@ -493,38 +498,73 @@ document.addEventListener('DOMContentLoaded', function(){
     document.body.style.overflow = 'hidden';
     lightbox.classList.add('open');
     lightbox.setAttribute('aria-hidden','false');
+    // s'assurer que l'overlay capte les événements
+    lightbox.style.pointerEvents = 'auto';
     lbClose.focus();
   }
 
   function closeLightbox(){
+    // empêcher toute réouverture pendant la transition
+    suppressOpen = true;
     lightbox.classList.remove('open');
     lightbox.setAttribute('aria-hidden','true');
-    // délai pour laisser la transition se terminer avant de réactiver le scroll
+    // désactiver immédiatement les pointer events pour éviter que le tap ne "passe" aux miniatures dessous
+    lightbox.style.pointerEvents = 'none';
+    // délai légèrement supérieur à la transition CSS
     setTimeout(function(){
       document.body.style.overflow = '';
       document.documentElement.removeAttribute('data-lightbox-open');
       lbImg.src = '';
-    }, 220);
+      // réactiver la possibilité d'ouvrir après courte attente
+      suppressOpen = false;
+      lightbox.style.pointerEvents = '';
+    }, 300);
   }
 
   imgs.forEach(function(img){
     img.style.cursor = 'zoom-in';
-    // rendre cliquable via clavier
     img.setAttribute('tabindex', img.getAttribute('tabindex') || '0');
     img.addEventListener('click', function(e){
+      if (suppressOpen) return;
       var src = img.getAttribute('data-large') || img.src;
       openLightbox(src, img.alt || '');
     });
     img.addEventListener('keydown', function(e){
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); var src = img.getAttribute('data-large') || img.src; openLightbox(src, img.alt || ''); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!suppressOpen) { var src = img.getAttribute('data-large') || img.src; openLightbox(src, img.alt || ''); } }
     });
   });
 
   // fermer en cliquant sur l'overlay (sauf si on clique sur l'image)
   lightbox.addEventListener('click', function(e){
-    if (e.target === lightbox) closeLightbox();
+    if (e.target === lightbox) { e.stopPropagation(); closeLightbox(); }
   });
-  lbClose.addEventListener('click', closeLightbox);
+
+  lbClose.addEventListener('click', function(e){ e.stopPropagation(); closeLightbox(); });
+
+  // permettre fermeture en cliquant SUR l'image elle-même + accès clavier
+  if (lbImg) {
+    lbImg.setAttribute('tabindex','0'); // focusable
+
+    lbImg.addEventListener('pointerdown', function(e){
+      // priorité aux touches tactiles : empêcher propagation et fermer
+      if (e.pointerType === 'touch') {
+        e.preventDefault();
+        e.stopPropagation();
+        closeLightbox();
+      }
+    }, {passive:false});
+
+    lbImg.addEventListener('click', function(e){
+      // souris / fallback : empêcher propagation puis fermer
+      e.preventDefault();
+      e.stopPropagation();
+      closeLightbox();
+    });
+
+    lbImg.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); closeLightbox(); }
+    });
+  }
 
   // fermer avec Esc
   document.addEventListener('keydown', function(e){
@@ -533,5 +573,77 @@ document.addEventListener('DOMContentLoaded', function(){
 
 });
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function(){
+    (function(){
+      var desc = document.getElementById('gallery-desc');
+      var full = document.getElementById('gallery-desc-full');
+      var closeBtn = document.getElementById('gallery-desc-close');
+      if (!desc || !full) return;
+
+      // état initial
+      full.style.display = full.classList.contains('open') ? 'block' : 'none';
+
+      function ensureNavClosed() {
+        var nav = document.querySelector('.nav-links');
+        var menuBtn = document.getElementById('menu-toggle');
+        if (nav && (nav.classList.contains('open') || nav.classList.contains('show'))) {
+          nav.classList.remove('open','show');
+          if (menuBtn) menuBtn.setAttribute('aria-expanded','false');
+          document.body.classList.remove('menu-open');
+        }
+      }
+
+      function openDesc() {
+        ensureNavClosed();
+        full.style.display = 'block';
+        requestAnimationFrame(function(){
+          full.classList.add('open');
+          full.setAttribute('aria-hidden','false');
+          desc.setAttribute('aria-expanded','true');
+          if (closeBtn) closeBtn.focus();
+        });
+      }
+      function closeDesc() {
+        full.classList.remove('open');
+        full.setAttribute('aria-hidden','true');
+        desc.setAttribute('aria-expanded','false');
+        setTimeout(function(){
+          full.style.display = 'none';
+          desc.focus();
+        }, 320);
+      }
+      function toggleDesc(){ if (full.classList.contains('open')) closeDesc(); else openDesc(); }
+
+      // éviter double déclenchement touch -> click : gestion via pointer events
+      var suppressClick = false;
+      desc.addEventListener('pointerdown', function(e){
+        if (e.pointerType === 'touch') {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleDesc();
+          suppressClick = true;
+          setTimeout(function(){ suppressClick = false; }, 400);
+        }
+      }, {passive:false});
+
+      // click pour souris / fallback
+      desc.addEventListener('click', function(e){
+        if (suppressClick) return;
+        toggleDesc();
+      });
+
+      // clavier
+      desc.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleDesc(); }
+      });
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function(e){ e.stopPropagation(); closeDesc(); });
+        closeBtn.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); closeDesc(); } });
+      }
+    })();
+  });
+  </script>
 </body>
 </html>
