@@ -304,7 +304,19 @@
     .hamburger { width:38px; height:32px; font-size:0.9rem; }
   }
 }
-</style></head>
+</style>
+<style>
+    /* Espace réservé pour la navbar : valeur par défaut puis ajustée par JS */
+    :root { --site-nav-offset: 80px; }
+    /* garantit que le contenu commence sous la navbar */
+    main, .content, .gallery-list, .gallery-page {
+      padding-top: calc(var(--site-nav-offset) + 0.6rem);
+      box-sizing: border-box;
+    }
+    /* si des pages utilisent margin-top, neutraliser pour éviter doublon */
+    .gallery-page { margin-top: 0 !important; }
+  </style>
+</head>
 <body>
 <!-- ===== Barre de navigation principale ===== -->
 <nav class="navbar">
@@ -392,6 +404,32 @@
         document.querySelector('.nav-links').classList.toggle('show');
       };
     });
+  </script>
+<script>
+  (function(){
+    function updateNavOffset(){
+      var nav = document.querySelector('.navbar');
+      var offset = 80;
+      if (nav) {
+        var rect = nav.getBoundingClientRect();
+        offset = Math.ceil(rect.height);
+      }
+      document.documentElement.style.setProperty('--site-nav-offset', offset + 'px');
+      if (document.body) document.body.style.paddingTop = offset + 'px';
+    }
+    // attendre l'injection éventuelle de la navbar (max ~2s)
+    var tries = 0;
+    function waitForNav(){
+      if (document.querySelector('.navbar')) { updateNavOffset(); return; }
+      tries++;
+      if (tries < 40) setTimeout(function(){ waitForNav(); }, 50);
+      else updateNavOffset();
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', waitForNav);
+    else waitForNav();
+    window.addEventListener('resize', function(){ setTimeout(updateNavOffset, 80); });
+    window.addEventListener('load', function(){ setTimeout(updateNavOffset, 120); });
+  })();
   </script>
 </body>
 </html>
