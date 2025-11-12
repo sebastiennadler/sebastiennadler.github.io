@@ -1,19 +1,19 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
-  <!--
+<!--
     Ce fichier HTML fait partie du site d'Ana Ruiz.
     Structure, navigation, et fonctionnalités sont expliquées par des commentaires dans le code.
     Tout est responsive, accessible et moderne. Voir README.md pour plus de détails.
   -->
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>La maison ou le pouvoir de rentrer en soi-même (2012) - Ana Ruiz</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style-modern.css">
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>La maison ou le pouvoir de rentrer en soi-même (2012) - Ana Ruiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&amp;display=swap" rel="stylesheet"/>
+<link href="css/style-modern.css" rel="stylesheet"/>
+<style>
     body { background: #151516 !important; }
     .gallery-page {
       max-width: 1000px;
@@ -312,107 +312,284 @@
       .lightbox-close{ top:8px; right:8px; font-size:.95rem; padding:.3rem .45rem;}
     }
   </style>
+<script defer="" src="js/navbar-load.js"></script>
+<style>
+.nav-logo a {
+  font-size: 1.05rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.nav-signature { display:inline-block; margin-left:.4rem; height:22px; }
 
-</head>
+/* Navigation links (desktop) */
+.nav-links {
+  display: flex;
+  gap: 1rem;
+  margin-left: auto;
+  align-items: center;
+}
+.nav-links a {
+  display: inline-block;
+  padding: .6rem .7rem;
+  font-size: 0.98rem;
+  line-height: 1;
+  color: inherit;
+  text-decoration: none;
+  border-radius: .35rem;
+}
 
+/* visual breathing room for navbar on large screens */
+@media (min-width: 1200px) {
+  .navbar { padding: 1.2rem 0; }
+  .nav-links a { padding: .7rem .9rem; font-size: 1rem; }
+}
+
+/* --- Mobile: adapter mais garder la barre plus haute proportionnellement --- */
+@media (max-width: 840px){
+  .navbar { padding: 0.8rem 0.6rem; }
+  .navbar-container { gap: .6rem; padding: 0 0.6rem; }
+
+  /* limiter la largeur du texte du logo mais le garder lisible */
+  .nav-logo a {
+    font-size: 0.88rem;
+    font-weight:700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  /* signature réduite pour mobile */
+  .nav-signature{display:block; height:18px; width:auto; margin-left:.25rem; opacity:.95}
+  .nav-signature img{height:18px; width:auto; display:block; opacity:.95}
+
+  /* hamburger un peu plus grand pour confort tactile */
+  .hamburger{
+    margin-left:auto;
+    width:42px;
+    height:36px;
+    padding:0;
+    display:grid;
+    place-items:center;
+    font-size:1rem;
+    line-height:1;
+    border-radius:.5rem;
+  }
+
+  /* Menu mobile: colonne, plein largeur mais discret */
+  .nav-links{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:0.12rem;
+    padding:0.35rem 0;
+    width:100%;
+  }
+  .nav-links.open{display:flex}
+
+  .nav-links li { margin:0; width:100%; }
+  .nav-links a{
+    display:block;
+    padding:.44rem 0;
+    font-size:0.92rem;
+    line-height:1.15;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    width:100%;
+  }
+
+  /* très petits écrans : compacter encore légèrement */
+  @media (max-width: 380px) {
+    .nav-logo a { max-width: 120px; font-size:0.8rem; }
+    .nav-links a { font-size:0.82rem; padding:.28rem 0; }
+    .hamburger { width:38px; height:32px; font-size:0.9rem; }
+  }
+}
+</style><style>
+.nav-logo a {
+  font-size: 1.05rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.nav-signature { display:inline-block; margin-left:.4rem; height:22px; }
+
+/* Navigation links (desktop) */
+.nav-links {
+  display: flex;
+  gap: 1rem;
+  margin-left: auto;
+  align-items: center;
+}
+.nav-links a {
+  display: inline-block;
+  padding: .6rem .7rem;
+  font-size: 0.98rem;
+  line-height: 1;
+  color: inherit;
+  text-decoration: none;
+  border-radius: .35rem;
+}
+
+/* visual breathing room for navbar on large screens */
+@media (min-width: 1200px) {
+  .navbar { padding: 1.2rem 0; }
+  .nav-links a { padding: .7rem .9rem; font-size: 1rem; }
+}
+
+/* --- Mobile: adapter mais garder la barre plus haute proportionnellement --- */
+@media (max-width: 840px){
+  .navbar { padding: 0.8rem 0.6rem; }
+  .navbar-container { gap: .6rem; padding: 0 0.6rem; }
+
+  /* limiter la largeur du texte du logo mais le garder lisible */
+  .nav-logo a {
+    font-size: 0.88rem;
+    font-weight:700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  /* signature réduite pour mobile */
+  .nav-signature{display:block; height:18px; width:auto; margin-left:.25rem; opacity:.95}
+  .nav-signature img{height:18px; width:auto; display:block; opacity:.95}
+
+  /* hamburger un peu plus grand pour confort tactile */
+  .hamburger{
+    margin-left:auto;
+    width:42px;
+    height:36px;
+    padding:0;
+    display:grid;
+    place-items:center;
+    font-size:1rem;
+    line-height:1;
+    border-radius:.5rem;
+  }
+
+  /* Menu mobile: colonne, plein largeur mais discret */
+  .nav-links{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:0.12rem;
+    padding:0.35rem 0;
+    width:100%;
+  }
+  .nav-links.open{display:flex}
+
+  .nav-links li { margin:0; width:100%; }
+  .nav-links a{
+    display:block;
+    padding:.44rem 0;
+    font-size:0.92rem;
+    line-height:1.15;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    width:100%;
+  }
+
+  /* très petits écrans : compacter encore légèrement */
+  @media (max-width: 380px) {
+    .nav-logo a { max-width: 120px; font-size:0.8rem; }
+    .nav-links a { font-size:0.82rem; padding:.28rem 0; }
+    .hamburger { width:38px; height:32px; font-size:0.9rem; }
+  }
+}
+</style></head>
 <body>
-  <!-- ===== Barre de navigation principale ===== -->
+<!-- ===== Barre de navigation principale ===== -->
 <nav class="navbar">
-  <div class="navbar-container">
-    <div class="nav-logo">
-      <a href="index.html">Ana Ruiz</a>
-      <img src="img/signature.png" alt="Signature Ana Ruiz" class="nav-signature">
-    </div>
-    <button id="menu-toggle" aria-label="Ouvrir le menu" class="hamburger">&#9776;</button>
-    <ul class="nav-links">
-      <li><a href="index.html">Accueil</a></li>
-      <li><a href="galeries.html">Galeries</a></li>
-      <li><a href="videos.html">Vidéos</a></li>
-      <li><a href="publications.html">Publications</a></li>
-      <li><a href="diaporama.html">Diaporama</a></li>
-      <li><a href="apropos.html">À propos</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </div>
+<div class="navbar-container">
+<div class="nav-logo">
+<a href="index.html">Ana Ruiz</a>
+<img alt="Signature Ana Ruiz" class="nav-signature" src="img/signature.png"/>
+</div>
+<button aria-label="Ouvrir le menu" class="hamburger" id="menu-toggle">☰</button>
+<ul class="nav-links">
+<li><a href="index.html">Accueil</a></li>
+<li><a href="galeries.html">Galeries</a></li>
+<li><a href="videos.html">Vidéos</a></li>
+<li><a href="publications.html">Publications</a></li>
+<li><a href="diaporama.html">Diaporama</a></li>
+<li><a href="apropos.html">À propos</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+</div>
 </nav>
-  
-  <!-- ===== Contenu principal de la page ===== -->
-  <main>
-
-    <div class="gallery-page fade-in">
-      <div class="gallery-title">La maison ou le pouvoir de rentrer en soi-même (2012)</div>
-      <div id="gallery-desc" class="gallery-desc" tabindex="0" role="button" aria-expanded="false" title="Cliquer pour développer">
+<!-- ===== Contenu principal de la page ===== -->
+<main>
+<div class="gallery-page fade-in">
+<div class="gallery-title">La maison ou le pouvoir de rentrer en soi-même (2012)</div>
+<div aria-expanded="false" class="gallery-desc" id="gallery-desc" role="button" tabindex="0" title="Cliquer pour développer">
         La maison est-elle le reflet de notre personnalité qui se construit peu à peu au fil des ans ? Le geste transmis de génération en génération ? 
-        </br>Qui, de nous ou de la maison reflète l'autre ? Qui construit et protège l'autre ? 
+        Qui, de nous ou de la maison reflète l'autre ? Qui construit et protège l'autre ? 
         
       </div>
-      <!-- remplacer le contenu actuel de #gallery-desc-full par : -->
-      <div id="gallery-desc-full" class="expanded-text" aria-hidden="true">
-        <button id="gallery-desc-close" class="expanded-close" aria-label="Fermer la description">✕</button>
-
-        <p>
+<!-- remplacer le contenu actuel de #gallery-desc-full par : -->
+<div aria-hidden="true" class="expanded-text" id="gallery-desc-full">
+<button aria-label="Fermer la description" class="expanded-close" id="gallery-desc-close">✕</button>
+<p>
           Parce qu’elle est indissociablement matérielle et immatérielle — maison où l’on vit et maison que l’on porte au fond de soi — la maison nous habite autant que nous l’habitons. C’est pourquoi la perdre revient aussi à se perdre soi‑même : rester enfermé dehors et en dehors de soi, en exil, dépossédé de l’espace intime de vie et du pouvoir de rentrer en soi‑même, séparé de soi et des autres comme un fantôme hanté par la maison disparue.
         </p>
-
-        <p>
+<p>
           Un vieux conte traditionnel nous enseigne comment, grâce à notre travail et pourvu que nous soyons prévoyants, nous n’aurons rien à craindre pour la sécurité de la maisonnée, car nous choisirons sagement entre la maison de paille et de ciment, capable de braver le souffle du loup qui peut aisément balayer la maison de paille et secouer fortement la maison de bois qu’elle finit par dégringoler. Mais le loup est devenu bien pire symbole des dangers qui menacent les foyers. Quelle sorte de maison pourra nous protéger, sans faillir, des tempêtes qui soufflent sur notre monde et qui, financièrement, précipitent dans la ruine des populations entières ? Le conte ne le dit pas.
         </p>
-
-        <p>
+<p>
           Sur le fil qui relie entre elles toutes les maisons du monde avance opiniâtrement en vacillant une frêle silhouette. Serait‑ce un hidalgo funambule que la force d’un noble et généreux idéal empêche de tomber et pousse envers et contre tout à aller de l’avant ? Cherche‑t‑il, de maison en maison, une porte ouverte sur un autre monde où toute maison est le centre de l’univers et où aucune ne sera jamais détruite ? Nous marchons tous sur un fil et, de là‑haut, si nous regardons bien, si nous regardons penchés à la fenêtre du cœur,
         </p>
-        <p><em>Germinal Arcal Palacio</em></p>
-        <blockquote>
+<p><em>Germinal Arcal Palacio</em></p>
+<blockquote>
           « (…) toutes les maisons apparaissent comme des coques de bateaux joliment colorées sur la mer immense et bleue de l’univers. Fragiles, les petites voiles triangulaires et le mât pointé vers le ciel, elles disent en même temps notre enfermement et notre légèreté, notre gravité et notre vanité. »
         </blockquote>
-
-        <div class="source">(Lydia Devos, La Maison, Le Seuil)</div>
+<div class="source">(Lydia Devos, La Maison, Le Seuil)</div>
+</div>
+<div class="gallery-works">
+<div class="gallery-work">
+<img alt="Maison sacrée" data-large="img/la-maison/maison-sacree.jpg" src="img/la-maison/maison-sacree.jpg" tabindex="0"/>
+<div class="gallery-work-title">Maison sacrée</div>
+<div class="gallery-work-desc"></div>
+</div>
+<div class="gallery-work">
+<img alt="Maison Floride" data-large="img/la-maison/maison-floride.jpg" src="img/la-maison/maison-floride.jpg" tabindex="0"/>
+<div class="gallery-work-title">Maison Floride</div>
+<div class="gallery-work-desc"></div>
+</div>
+<div class="gallery-work">
+<img alt="Maison temple" data-large="img/maison-temple.jpg" src="img/maison-temple.jpg" tabindex="0"/>
+<div class="gallery-work-title">Maison temple</div>
+<div class="gallery-work-desc"></div>
+</div>
+<div class="gallery-work">
+<img alt="Maison palais prison" data-large="img/maison-palais-prison.jpg" src="img/maison-palais-prison.jpg" tabindex="0"/>
+<div class="gallery-work-title">Maison palais prison</div>
+<div class="gallery-work-desc"></div>
+</div>
+<!-- Ajoute autant d’œuvres que dans la page initiale, en gardant cette structure -->
+</div>
+<div class="gallery-citation">
+        « Rentrer dans la maison, c’est peut-être rentrer en soi-même… »
       </div>
-      <div class="gallery-works">
-
-        <div class="gallery-work">
-          <img src="img/la-maison/maison-sacree.jpg" alt="Maison sacrée" tabindex="0" data-large="img/la-maison/maison-sacree.jpg">
-          <div class="gallery-work-title">Maison sacrée</div>
-          <div class="gallery-work-desc"></div>
-        </div>
-
-        <div class="gallery-work">
-          <img src="img/la-maison/maison-floride.jpg" alt="Maison Floride" tabindex="0" data-large="img/la-maison/maison-floride.jpg">
-          <div class="gallery-work-title">Maison Floride</div>
-          <div class="gallery-work-desc"></div>
-        </div>
-
-        <div class="gallery-work">
-          <img src="img/maison-temple.jpg" alt="Maison temple" tabindex="0" data-large="img/maison-temple.jpg">
-          <div class="gallery-work-title">Maison temple</div>
-          <div class="gallery-work-desc"></div>
-        </div>
-
-        <div class="gallery-work">
-          <img src="img/maison-palais-prison.jpg" alt="Maison palais prison" tabindex="0" data-large="img/maison-palais-prison.jpg">
-          <div class="gallery-work-title">Maison palais prison</div>
-          <div class="gallery-work-desc"></div>
-        </div>
-
-        <!-- Ajoute autant d’œuvres que dans la page initiale, en gardant cette structure -->
-
-      </div>
-      <div class="gallery-citation">
-        «&nbsp;Rentrer dans la maison, c’est peut-être rentrer en soi-même…&nbsp;»
-      </div>
-      <div class="gallery-back">
-        <a href="galeries.html">&larr; Retour aux galeries</a>
-      </div>
-    </div>
-  </main>
-  
-  <!-- ===== Pied de page commun à tout le site ===== -->
+<div class="gallery-back">
+<a href="galeries.html">← Retour aux galeries</a>
+</div>
+</div>
+</main>
+<!-- ===== Pied de page commun à tout le site ===== -->
 <footer>
-  <p>© 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
+<p>© 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
 </footer>
-  
-  <!-- ===== Scripts spécifiques à la page ===== -->
-  <script>
+<!-- ===== Scripts spécifiques à la page ===== -->
+<script>
 
     document.addEventListener("DOMContentLoaded", function() {
       // fade-in
@@ -466,17 +643,16 @@
       })();
      });
   </script>
-
-  <div id="lightbox" class="lightbox-overlay" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="lightbox-inner" role="document">
-      <button id="lightbox-close" class="lightbox-close" aria-label="Fermer la vue plein écran">✕</button>
-      <div class="lightbox-content">
-        <img id="lightbox-img" src="" alt="">
-        <div id="lightbox-caption" class="lightbox-caption" aria-hidden="true"></div>
-      </div>
-    </div>
-  </div>
-  <script>
+<div aria-hidden="true" aria-modal="true" class="lightbox-overlay" id="lightbox" role="dialog">
+<div class="lightbox-inner" role="document">
+<button aria-label="Fermer la vue plein écran" class="lightbox-close" id="lightbox-close">✕</button>
+<div class="lightbox-content">
+<img alt="" id="lightbox-img" src=""/>
+<div aria-hidden="true" class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+</div>
+</div>
+<script>
 document.addEventListener('DOMContentLoaded', function(){
   var imgs = document.querySelectorAll('.gallery-work img');
   var lightbox = document.getElementById('lightbox');
