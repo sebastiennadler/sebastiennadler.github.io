@@ -14,14 +14,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&amp;display=swap" rel="stylesheet"/>
 <link href="css/style-modern.css" rel="stylesheet"/>
 <style>
-    body { background: #151516 !important; }
-    .gallery-page {
-      max-width: 1000px;
-      margin: 0 auto 3rem auto;
-      padding: 0 1vw;
-      /* espace au-dessus calculé à partir de la hauteur réelle de la navbar */
-      margin-top: calc(var(--site-nav-offset) + 0.8rem);
-    }
+    /* fallback : valeur par défaut pour éviter chevauchement si JS n'a pas encore calculé la hauteur */
+    :root { --site-nav-offset: 80px; }
+     body { background: #151516 !important; }
+     .gallery-page {
+       max-width: 1000px;
+       margin: 0 auto 3rem auto;
+       padding: 0 1vw;
+       /* espace au-dessus calculé à partir de la hauteur réelle de la navbar */
+       margin-top: calc(var(--site-nav-offset) + 0.8rem);
+     }
     .gallery-title {
       font-family: 'Playfair Display', serif;
       font-size: 2rem;
@@ -825,5 +827,38 @@ document.addEventListener('DOMContentLoaded', function(){
     })();
   });
   </script>
+<script>
+  /* Ajuste dynamiquement --site-nav-offset pour empêcher chevauchement navbar / contenu.
+     Fonctionne si la navbar est injectée dynamiquement (poll jusqu'à sa présence).
+   */
+  (function(){
+    function updateNavOffset() {
+      var nav = document.querySelector('.navbar');
+      var offset = 80;
+      if (nav) {
+        var rect = nav.getBoundingClientRect();
+        offset = Math.ceil(rect.height);
+      }
+      // applique variable CSS et un padding-top en secours
+      document.documentElement.style.setProperty('--site-nav-offset', offset + 'px');
+      // si le contenu est visuellement chevauché, forcer padding-top sur body
+      if (document.body) {
+        document.body.style.paddingTop = offset + 'px';
+      }
+    }
+
+    // attente robuste : tente jusqu'à la présence de .navbar (max 2s)
+    var tries = 0;
+    function waitForNav(){
+      if (document.querySelector('.navbar')) { updateNavOffset(); return; }
+      tries++;
+      if (tries < 40) { setTimeout(waitForNav, 50); } else { updateNavOffset(); }
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', waitForNav);
+    else waitForNav();
+    window.addEventListener('resize', function(){ setTimeout(updateNavOffset, 80); });
+    window.addEventListener('load', function(){ setTimeout(updateNavOffset, 120); });
+  })();
+</script>
 </body>
 </html>
