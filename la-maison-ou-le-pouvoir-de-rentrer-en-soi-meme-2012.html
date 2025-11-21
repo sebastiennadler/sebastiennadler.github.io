@@ -585,5 +585,131 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
     window.addEventListener('load', ()=>setTimeout(updateNavOffset,120));
   })();
 </script>
+<style>
+/* === Lightbox fullscreen corrigée === */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  background: rgba(0,0,0,.94);
+  z-index: 6000;
+  touch-action: none;
+}
+.lightbox-overlay.open { display: flex; }
+.lightbox-inner {
+  width: 100dvw;
+  height: 100dvh;
+  max-width: 100dvw;
+  max-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  box-sizing: border-box;
+}
+#lightbox-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  margin: 0;
+  display: block;
+  -webkit-user-select: none;
+  user-select: none;
+}
+#lightbox-close {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 10px);
+  right: calc(env(safe-area-inset-right) + 12px);
+  background: rgba(255,255,255,.16);
+  color: #fff;
+  border: 0;
+  padding: .48rem .78rem;
+  font-size: 1rem;
+  line-height: 1;
+  border-radius: 32px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  z-index: 6100;
+}
+#lightbox-close:hover,#lightbox-close:focus { background: rgba(255,255,255,.28); outline: none; }
+body.lb-open { overflow: hidden; }
+body.lb-open .navbar { transform: translateY(-130%); opacity:0; pointer-events:none; transition:.25s; }
+</style>
+
+<!-- Lightbox HTML (remplacer l’ancien bloc) -->
+<div id="lightbox" class="lightbox-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="lightbox-inner">
+    <img id="lightbox-img" alt="">
+    <button id="lightbox-close" aria-label="Fermer la vue plein écran">✕</button>
+  </div>
+</div>
+
+<script>
+/* === Script lightbox centré responsive === */
+(function(){
+  const thumbs = document.querySelectorAll('.gallery-work img');
+  if(!thumbs.length) return;
+  const box = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  const closeBtn = document.getElementById('lightbox-close');
+  let lock = false, savedPad = '';
+
+  function vpSize(){
+    if(window.visualViewport){
+      return { w: window.visualViewport.width, h: window.visualViewport.height };
+    }
+    return { w: window.innerWidth, h: window.innerHeight };
+  }
+  function adjust(){
+    if(!box.classList.contains('open')) return;
+    const vp = vpSize();
+    img.style.maxWidth = vp.w + 'px';
+    img.style.maxHeight = vp.h + 'px';
+  }
+  function open(src, alt){
+    if(lock) return;
+    savedPad = document.body.style.paddingTop || '';
+    document.body.style.paddingTop = '0';
+    img.src = src;
+    img.alt = alt || '';
+    box.classList.add('open');
+    box.setAttribute('aria-hidden','false');
+    document.body.classList.add('lb-open');
+    closeBtn.focus();
+    setTimeout(adjust,40);
+    setTimeout(adjust,220);
+  }
+  function close(){
+    lock = true;
+    box.classList.remove('open');
+    box.setAttribute('aria-hidden','true');
+    document.body.classList.remove('lb-open');
+    document.body.style.paddingTop = savedPad;
+    setTimeout(()=>{ img.src=''; lock=false; },180);
+  }
+  thumbs.forEach(t=>{
+    t.style.cursor='zoom-in';
+    t.tabIndex = t.tabIndex || 0;
+    const src = t.getAttribute('data-large') || t.src;
+    function trigger(e){ e.preventDefault(); open(src, t.alt||''); }
+    t.addEventListener('click', trigger);
+    t.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' ') trigger(e); });
+    t.addEventListener('pointerdown', e=>{ if(e.pointerType==='touch') trigger(e); }, {passive:true});
+  });
+  closeBtn.addEventListener('click', e=>{ e.stopPropagation(); close(); });
+  box.addEventListener('click', e=>{ if(e.target===box) close(); });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && box.classList.contains('open')) close(); });
+  window.addEventListener('resize', adjust);
+  window.addEventListener('orientationchange', ()=>setTimeout(adjust,160));
+  if(window.visualViewport){
+    visualViewport.addEventListener('resize', ()=>setTimeout(adjust,50));
+  }
+})();
+</script>
 </body>
 </html>
