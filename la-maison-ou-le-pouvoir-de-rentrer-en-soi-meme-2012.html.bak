@@ -194,6 +194,7 @@
       .gallery-work img { height: 180px;}
     }
 
+
     /* Eviter que la barre chevauche le contenu : garde compatibilité */
 -  .gallery-page { margin-top: calc(5rem + 0.8rem); } /* ajuste si nécessaire */
 +  /* la variable CSS --site-nav-offset garantit que le contenu commence sous la navbar */
@@ -241,11 +242,185 @@
       margin-top: 0.6rem;
       font-size: 0.95rem;
     }
+
+    /* Lightbox fullscreen propre */
+    .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.92);
+      z-index: 5000;
+      padding: 0;
+      margin: 0;
+    }
+    .lightbox-overlay.open { display: flex; }
+    .lightbox-inner {
+      position: relative;
+      max-width: 100dvw;
+      max-height: 100dvh;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #lightbox-img {
+      max-width: 100dvw;
+      max-height: 100dvh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      margin: 0;
+      touch-action: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #lightbox-caption {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #e6dfd8;
+      font-size: .85rem;
+      background: rgba(0,0,0,.4);
+      padding: .35rem .7rem;
+      border-radius: 6px;
+      max-width: 82vw;
+      text-align: center;
+      backdrop-filter: blur(3px);
+      pointer-events: none;
+    }
+    .lightbox-exit {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 5100;
+      background: rgba(255,255,255,0.10);
+      color: #fff;
+      border: 0;
+      padding: .45rem .75rem;
+      font-size: .95rem;
+      line-height: 1;
+      border-radius: 28px;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+    }
+    .lightbox-exit:hover,
+    .lightbox-exit:focus { background: rgba(255,255,255,0.22); outline: none; }
+    body.lightbox-open { overflow: hidden; }
+    body.lightbox-open .navbar {
+      transform: translateY(-130%);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .25s ease, opacity .25s ease;
+    }
     @media (orientation: landscape) {
+      #lightbox-img {
+        max-width: 100vw;
+        max-height: 100vh;
+      }
     }
   </style>
-
+<script defer="" src="js/navbar-load.js"></script>
 <style>
+.nav-logo a {
+  font-size: 1.05rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.nav-signature { display:inline-block; margin-left:.4rem; height:22px; }
+
+/* Navigation links (desktop) */
+.nav-links {
+  display: flex;
+  gap: 1rem;
+  margin-left: auto;
+  align-items: center;
+}
+.nav-links a {
+  display: inline-block;
+  padding: .6rem .7rem;
+  font-size: 0.98rem;
+  line-height: 1;
+  color: inherit;
+  text-decoration: none;
+  border-radius: .35rem;
+}
+
+/* visual breathing room for navbar on large screens */
+@media (min-width: 1200px) {
+  .navbar { padding: 1.2rem 0; }
+  .nav-links a { padding: .7rem .9rem; font-size: 1rem; }
+}
+
+/* --- Mobile: adapter mais garder la barre plus haute proportionnellement --- */
+@media (max-width: 840px){
+  .navbar { padding: 0.8rem 0.6rem; }
+  .navbar-container { gap: .6rem; padding: 0 0.6rem; }
+
+  /* limiter la largeur du texte du logo mais le garder lisible */
+  .nav-logo a {
+    font-size: 0.88rem;
+    font-weight:700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  /* signature réduite pour mobile */
+  .nav-signature{display:block; height:18px; width:auto; margin-left:.25rem; opacity:.95}
+  .nav-signature img{height:18px; width:auto; display:block; opacity:.95}
+
+  /* hamburger un peu plus grand pour confort tactile */
+  .hamburger{
+    margin-left:auto;
+    width:42px;
+    height:36px;
+    padding:0;
+    display:grid;
+    place-items:center;
+    font-size:1rem;
+    line-height:1;
+    border-radius:.5rem;
+  }
+
+  /* Menu mobile: colonne, plein largeur mais discret */
+  .nav-links{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:0.12rem;
+    padding:0.35rem 0;
+    width:100%;
+  }
+  .nav-links.open{display:flex}
+
+  .nav-links li { margin:0; width:100%; }
+  .nav-links a{
+    display:block;
+    padding:.44rem 0;
+    font-size:0.92rem;
+    line-height:1.15;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    width:100%;
+  }
+
+  /* très petits écrans : compacter encore légèrement */
+  @media (max-width: 380px) {
+    .nav-logo a { max-width: 120px; font-size:0.8rem; }
+    .nav-links a { font-size:0.82rem; padding:.28rem 0; }
+    .hamburger { width:38px; height:32px; font-size:0.9rem; }
+  }
+}
+</style><style>
 .nav-logo a {
   font-size: 1.05rem;
   font-weight: 700;
@@ -424,90 +599,333 @@
 <footer>
 <p>© 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
 </footer>
-
-<!-- Lightbox unique -->
-<style>
-.fade-in{opacity:1!important;transform:none!important;}
-.lb-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.92);z-index:5000;}
-.lb-overlay.open{display:flex;}
-.lb-inner{position:relative;max-width:100vw;max-height:100vh;display:flex;align-items:center;justify-content:center;}
-#lb-img{max-width:100vw;max-height:100vh;width:auto;height:auto;object-fit:contain;}
-#lb-close{position:absolute;top:10px;right:12px;background:rgba(255,255,255,.14);color:#fff;border:0;padding:.4rem .7rem;font-size:1rem;line-height:1;border-radius:32px;cursor:pointer;}
-#lb-close:hover,#lb-close:focus{background:rgba(255,255,255,.25);outline:none;}
-body.lb-open{overflow:hidden;}
-body.lb-open .navbar{transform:translateY(-120%);opacity:0;pointer-events:none;transition:.25s;}
-</style>
-<div id="lightbox" class="lb-overlay" aria-hidden="true" role="dialog">
-  <div class="lb-inner" role="document">
-    <img id="lb-img" alt=""/>
-    <button id="lb-close" type="button" aria-label="Fermer">×</button>
-  </div>
-</div>
-
+<!-- ===== Scripts spécifiques à la page ===== -->
 <script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+      // fade-in
+      document.querySelectorAll('.fade-in').forEach(function(el) { el.classList.add('visible'); });
+
+      // menu toggle (mobile) : gère .open et .show, aria, fermeture au clic hors menu et au resize
+      (function(){
+        var menuBtn = document.getElementById('menu-toggle');
+        var nav = document.querySelector('.nav-links');
+        if (!menuBtn || !nav) return;
+        menuBtn.setAttribute('aria-expanded','false');
+
+        function closeNav() {
+          nav.classList.remove('open');
+          nav.classList.remove('show');
+          menuBtn.setAttribute('aria-expanded','false');
+          document.body.classList.remove('menu-open');
+        }
+        function openNav() {
+          nav.classList.add('open');
+          nav.classList.add('show');
+          menuBtn.setAttribute('aria-expanded','true');
+          document.body.classList.add('menu-open');
+        }
+        menuBtn.addEventListener('click', function(e){
+          e.stopPropagation();
+          if (nav.classList.contains('open') || nav.classList.contains('show')) closeNav(); else openNav();
+        });
+        // fermer si on clique en dehors du menu (utile en mobile)
+        document.addEventListener('click', function(e){
+          if (window.matchMedia('(max-width:840px)').matches) {
+            if (nav.classList.contains('open') && !nav.contains(e.target) && e.target !== menuBtn) closeNav();
+          }
+        });
+        // fermer au redimensionnement si on passe en desktop pour éviter état incohérent
+        window.addEventListener('resize', function(){
+          if (!window.matchMedia('(max-width:840px)').matches) {
+            // sur desktop, laisser le nav visible via CSS ; retire les classes mobile
+            nav.classList.remove('open');
+            nav.classList.remove('show');
+            menuBtn.setAttribute('aria-expanded','false');
+            document.body.classList.remove('menu-open');
+          } else {
+            // petite sécurité : masquer par défaut quand on revient en mobile
+            nav.classList.remove('open');
+            nav.classList.remove('show');
+            menuBtn.setAttribute('aria-expanded','false');
+            document.body.classList.remove('menu-open');
+          }
+        });
+      })();
+     });
+  </script>
+<div id="lightbox" class="lightbox-overlay" aria-hidden="true" role="dialog">
+  <div class="lightbox-inner" role="document">
+    <img id="lightbox-img" alt="" src=""/>
+    <div id="lightbox-caption" aria-hidden="true"></div>
+  </div>
+  <button type="button" class="lightbox-exit" id="lightbox-exit" aria-label="Fermer la vue plein écran">Fermer</button>
+</div>
+<script>
+/* Lightbox nettoyée */
 (function(){
-  const thumbs=document.querySelectorAll('.gallery-work img');
-  if(!thumbs.length)return;
-  const box=document.getElementById('lightbox'),
-        img=document.getElementById('lb-img'),
-        closeBtn=document.getElementById('lb-close');
-  let lock=false;
+  var thumbs = document.querySelectorAll('.gallery-work img');
+  if(!thumbs.length) return;
+  var overlay   = document.getElementById('lightbox');
+  var imgFull   = document.getElementById('lightbox-img');
+  var captionEl = document.getElementById('lightbox-caption');
+  var exitBtn   = document.getElementById('lightbox-exit');
+  var blocking  = false;
 
-  function open(src,alt){
-    if(lock)return;
-    img.src=src; img.alt=alt||'';
-    box.classList.add('open'); box.setAttribute('aria-hidden','false'); document.body.classList.add('lb-open'); closeBtn.focus();
-  }
-  function close(){
-    lock=true;
-    box.classList.remove('open'); box.setAttribute('aria-hidden','true'); document.body.classList.remove('lb-open');
-    setTimeout(()=>{ img.src=''; lock=false; },200);
+  function adjust(){
+    if(!overlay.classList.contains('open')) return;
+    imgFull.style.maxWidth  = window.innerWidth + 'px';
+    imgFull.style.maxHeight = window.innerHeight + 'px';
   }
 
-  thumbs.forEach(t=>{
-    t.style.cursor='zoom-in';
+  function openLightbox(src, alt){
+    if(blocking) return;
+    imgFull.src = src;
+    imgFull.alt = alt || '';
+    captionEl.textContent = alt || '';
+    captionEl.setAttribute('aria-hidden', alt ? 'false':'true');
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden','false');
+    document.body.classList.add('lightbox-open');
+    exitBtn.focus();
+    adjust();
+  }
+
+  function closeLightbox(){
+    blocking = true;
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden','true');
+    document.body.classList.remove('lightbox-open');
+    setTimeout(function(){
+      imgFull.src = '';
+      blocking = false;
+    }, 220);
+  }
+
+  thumbs.forEach(function(t){
+    t.style.cursor = 'zoom-in';
     if(!t.hasAttribute('tabindex')) t.setAttribute('tabindex','0');
-    t.addEventListener('click',e=>{
+
+    // Touch: pointerdown ouverture rapide
+    t.addEventListener('pointerdown', function(e){
+      if(e.pointerType === 'touch'){
+        var src = t.getAttribute('data-large') || t.src;
+        openLightbox(src, t.alt || '');
+      }
+    }, {passive:true});
+
+    // Click souris / fallback
+    t.addEventListener('click', function(e){
       e.preventDefault();
-      open(t.getAttribute('data-large')||t.src, t.alt||'');
+      var src = t.getAttribute('data-large') || t.src;
+      openLightbox(src, t.alt || '');
     });
-    t.addEventListener('keydown',e=>{
-      if(e.key==='Enter'||e.key===' '){
+
+    // Clavier
+    t.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
         e.preventDefault();
-        open(t.getAttribute('data-large')||t.src, t.alt||'');
+        var src = t.getAttribute('data-large') || t.src;
+        openLightbox(src, t.alt || '');
       }
     });
-    t.addEventListener('pointerdown',e=>{
-      if(e.pointerType==='touch'){
-        open(t.getAttribute('data-large')||t.src, t.alt||'');
-      }
-    },{passive:true});
   });
 
-  closeBtn.addEventListener('click',e=>{ e.stopPropagation(); close(); });
-  box.addEventListener('click',e=>{ if(e.target===box) close(); });
-  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&box.classList.contains('open')) close(); });
+  // Fermeture interactions
+  exitBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    closeLightbox();
+  });
+
+  overlay.addEventListener('click', function(e){
+    if(e.target === overlay) closeLightbox();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && overlay.classList.contains('open')) closeLightbox();
+  });
+
+  window.addEventListener('resize', function(){ adjust(); });
+  window.addEventListener('orientationchange', function(){ setTimeout(adjust,150); });
 })();
 </script>
-
 <script>
+  document.addEventListener("DOMContentLoaded", function(){
+    (function(){
+      var desc = document.getElementById('gallery-desc');
+      var full = document.getElementById('gallery-desc-full');
+      var closeBtn = document.getElementById('gallery-desc-close');
+      if (!desc || !full) return;
+
+      // état initial
+      full.style.display = full.classList.contains('open') ? 'block' : 'none';
+
+      function ensureNavClosed() {
+        var nav = document.querySelector('.nav-links');
+        var menuBtn = document.getElementById('menu-toggle');
+        if (nav && (nav.classList.contains('open') || nav.classList.contains('show'))) {
+          nav.classList.remove('open','show');
+          if (menuBtn) menuBtn.setAttribute('aria-expanded','false');
+          document.body.classList.remove('menu-open');
+        }
+      }
+
+      function openDesc() {
+        ensureNavClosed();
+        full.style.display = 'block';
+        requestAnimationFrame(function(){
+          full.classList.add('open');
+          full.setAttribute('aria-hidden','false');
+          desc.setAttribute('aria-expanded','true');
+          if (closeBtn) closeBtn.focus();
+        });
+      }
+      function closeDesc() {
+        full.classList.remove('open');
+        full.setAttribute('aria-hidden','true');
+        desc.setAttribute('aria-expanded','false');
+        setTimeout(function(){
+          full.style.display = 'none';
+          desc.focus();
+        }, 320);
+      }
+      function toggleDesc(){ if (full.classList.contains('open')) closeDesc(); else openDesc(); }
+
+      // éviter double déclenchement touch -> click : gestion via pointer events
+      var suppressClick = false;
+      desc.addEventListener('pointerdown', function(e){
+        if (e.pointerType === 'touch') {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleDesc();
+          suppressClick = true;
+          setTimeout(function(){ suppressClick = false; }, 400);
+        }
+      }, {passive:false});
+
+      // click pour souris / fallback
+      desc.addEventListener('click', function(e){
+        if (suppressClick) return;
+        toggleDesc();
+      });
+
+      // clavier
+      desc.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleDesc(); }
+      });
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function(e){ e.stopPropagation(); closeDesc(); });
+        closeBtn.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); closeDesc(); } });
+      }
+    })();
+  });
+  </script>
+<script>
+  /* Ajuste dynamiquement --site-nav-offset pour empêcher chevauchement navbar / contenu.
+     Fonctionne si la navbar est injectée dynamiquement (poll jusqu'à sa présence).
+   */
   (function(){
     function updateNavOffset() {
-      var nav=document.querySelector('.navbar');
-      var offset=nav?Math.ceil(nav.getBoundingClientRect().height):80;
-      document.documentElement.style.setProperty('--site-nav-offset', offset+'px');
-      document.body.style.paddingTop=offset+'px';
+      var nav = document.querySelector('.navbar');
+      var offset = 80;
+      if (nav) {
+        var rect = nav.getBoundingClientRect();
+        offset = Math.ceil(rect.height);
+      }
+      // applique variable CSS et un padding-top en secours
+      document.documentElement.style.setProperty('--site-nav-offset', offset + 'px');
+      // si le contenu est visuellement chevauché, forcer padding-top sur body
+      if (document.body) {
+        document.body.style.paddingTop = offset + 'px';
+      }
     }
-    var tries=0;
+
+    // attente robuste : tente jusqu'à la présence de .navbar (max 2s)
+    var tries = 0;
     function waitForNav(){
-      if(document.querySelector('.navbar')){ updateNavOffset(); return; }
-      if(++tries<40) setTimeout(waitForNav,50); else updateNavOffset();
+      if (document.querySelector('.navbar')) { updateNavOffset(); return; }
+      tries++;
+      if (tries < 40) { setTimeout(waitForNav, 50); } else { updateNavOffset(); }
     }
-    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', waitForNav);
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', waitForNav);
     else waitForNav();
-    window.addEventListener('resize', ()=>setTimeout(updateNavOffset,80));
-    window.addEventListener('load', ()=>setTimeout(updateNavOffset,120));
+    window.addEventListener('resize', function(){ setTimeout(updateNavOffset, 80); });
+    window.addEventListener('load', function(){ setTimeout(updateNavOffset, 120); });
   })();
 </script>
+<style>
+/* ajout / corrections lightbox plein écran mobile */
+body[data-lightbox-open] {
+  overflow:hidden;
+  padding-top:0 !important;
+}
+body[data-lightbox-open] .navbar {
+  transform:translateY(-120%);
+  opacity:0;
+  pointer-events:none;
+  transition:transform .25s ease, opacity .25s ease;
+}
+
+.lightbox-overlay {
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100dvh; /* prend en compte barre d’URL mobile moderne */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,0.92);
+  z-index:5000;
+  padding:0;
+}
+
+.lightbox-inner {
+  position:relative;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  margin:0;
+}
+
+.lightbox-inner img {
+  max-width:100dvw;
+  max-height:100dvh;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  margin:0;
+  display:block;
+  touch-action:none;
+}
+
+.lightbox-exit-btn {
+  position:fixed;
+  top:10px;
+  left:10px;
+  z-index:5100;
+  background:rgba(255,255,255,0.08);
+  color:#f7f3ee;
+  border:0;
+  padding:.45rem .65rem;
+  font-size:1rem;
+  line-height:1;
+  border-radius:40px;
+  cursor:pointer;
+  backdrop-filter:blur(4px);
+}
+.lightbox-exit-btn:focus,
+.lightbox-exit-btn:hover { background:rgba(255,255,255,0.16); outline:none; }
+
+@media (orientation:landscape) {
+  .lightbox-inner img {
+    max-width:100vw;
+    max-height:100vh;
+  }
+}
+</style>
 </body>
 </html>
