@@ -825,9 +825,9 @@ body.lb-open .navbar { transform:translateY(-130%); opacity:0; pointer-events:no
   position:absolute; top:8px; right:8px;
   background:rgba(0,0,0,.55); color:#fff; border:0;
   padding:.38rem .6rem; font-size:.85rem; line-height:1;
-  border-radius:6px; cursor:pointer; opacity:.8;
+  border-radius:6px; cursor:pointer; opacity:.85;
 }
-.gallery-work .zoom-btn:hover,.gallery-work .zoom-btn:focus { opacity:1; }
+.gallery-work .zoom-btn:hover,.gallery-work .zoom-btn:focus{opacity:1;}
 </style>
 
 <!-- Lightbox HTML unique -->
@@ -847,32 +847,32 @@ body.lb-open .navbar { transform:translateY(-130%); opacity:0; pointer-events:no
   const closeBtn = document.getElementById('lightbox-close');
   let lock=false, savedPad='';
 
-  // Retirer tout gestionnaire d’ouverture existant sur les images (nettoyage)
+  // Nettoyage: supprimer doublons éventuels (si restés)
+  document.querySelectorAll('div#lightbox:not(:last-of-type)').forEach(d=>d.remove());
+
+  // Retirer anciens listeners sur images
   document.querySelectorAll('.gallery-work img').forEach(i=>{
-    i.replaceWith(i.cloneNode(true)); // supprime anciens listeners
+    const clone=i.cloneNode(true);
+    i.parentNode.replaceChild(clone,i);
   });
 
-  // Ajouter bouton + si manquant
-  works.forEach(w=>{
-    const pic = w.querySelector('img');
-    if(!pic) return;
-    if(!w.querySelector('.zoom-btn')){
-      const b = document.createElement('button');
-      b.type='button';
-      b.className='zoom-btn';
-      b.textContent='+';
-      b.addEventListener('click', e=>{
-        e.stopPropagation();
-        open(pic.getAttribute('data-large')||pic.src, pic.alt||'');
-      });
-      w.appendChild(b);
-    }
+  // Ajouter boutons +
+  document.querySelectorAll('.gallery-work').forEach(w=>{
+    const pic=w.querySelector('img');
+    if(!pic || w.querySelector('.zoom-btn')) return;
+    const b=document.createElement('button');
+    b.type='button'; b.className='zoom-btn'; b.textContent='+';
+    b.addEventListener('click', e=>{
+      e.stopPropagation();
+      open(pic.getAttribute('data-large')||pic.src, pic.alt||'');
+    });
+    w.appendChild(b);
   });
 
   function setViewport(){
+    // Ajustement iOS paysage
     const vw = window.visualViewport ? window.visualViewport.width : window.innerWidth;
     const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    // pas de style inline sur img nécessaire (object-fit suffit)
     box.style.setProperty('--vw', vw+'px');
     box.style.setProperty('--vh', vh+'px');
   }
@@ -881,6 +881,15 @@ body.lb-open .navbar { transform:translateY(-130%); opacity:0; pointer-events:no
     if(lock) return;
     savedPad = document.body.style.paddingTop || '';
     document.body.style.paddingTop='0';
+    img.classList.remove('loaded');
+    img.removeAttribute('style');
+    img.onload=function(){
+      img.classList.add('loaded');
+    };
+    img.onerror=function(){
+      console.warn('Image introuvable:', src);
+      close(); alert('Image non trouvée: '+src);
+    };
     img.src=src; img.alt=alt||'';
     setViewport();
     box.classList.add('open');
@@ -896,7 +905,7 @@ body.lb-open .navbar { transform:translateY(-130%); opacity:0; pointer-events:no
     box.setAttribute('aria-hidden','true');
     document.body.classList.remove('lb-open');
     document.body.style.paddingTop=savedPad;
-    setTimeout(()=>{ img.src=''; lock=false; },180);
+    setTimeout(()=>{ img.src=''; lock=false; },160);
   }
 
   closeBtn.addEventListener('click', e=>{ e.stopPropagation(); close(); });
