@@ -677,20 +677,34 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
     panel.classList.remove('open');
     panel.setAttribute('aria-hidden','true');
     trigger.setAttribute('aria-expanded','false');
-    setTimeout(()=>{ panel.style.display='none'; trigger.focus(); },240);
+    setTimeout(()=>{ panel.style.display='none'; trigger.focus(); },220);
   }
   function toggle(){ panel.classList.contains('open') ? closeDesc() : openDesc(); }
 
-  trigger.addEventListener('click', e=>{ e.preventDefault(); toggle(); });
-  trigger.addEventListener('keydown', e=>{
-    if(e.key==='Enter'||e.key===' '){
-      e.preventDefault(); toggle();
+  // Clic desktop & mobile
+  trigger.addEventListener('click', function(e){
+    toggle();
+  });
+
+  // Clavier
+  trigger.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      toggle();
     }
   });
+
+  // Bouton fermer
   if(closeB){
-    closeB.addEventListener('click', e=>{ e.stopPropagation(); closeDesc(); });
-    closeB.addEventListener('keydown', e=>{
-      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); closeDesc(); }
+    closeB.addEventListener('click', function(e){
+      e.stopPropagation();
+      closeDesc();
+    });
+    closeB.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        closeDesc();
+      }
     });
   }
 })();

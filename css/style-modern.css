@@ -452,3 +452,7 @@ select:focus {
   }
 }
 
+/* Garantit clic sur déclencheur */
+.gallery-desc { pointer-events:auto; }
+.lightbox-overlay:not(.open) { pointer-events:none; }
+
