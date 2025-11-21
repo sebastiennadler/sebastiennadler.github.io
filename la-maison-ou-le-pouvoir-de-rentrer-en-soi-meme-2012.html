@@ -422,375 +422,11 @@
 </main>
 <!-- ===== Pied de page commun à tout le site ===== -->
 <footer>
-<p>© 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
+  <p>© 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
 </footer>
 
-<!-- Lightbox unique -->
 <style>
-.fade-in{opacity:1!important;transform:none!important;}
-.lb-overlay{
-  position:fixed; inset:0;
-  display:none;
-  align-items:center; justify-content:center;
-  background:#000;
-  background:rgba(0,0,0,.94);
-  z-index:5000;
-  touch-action:none;
-}
-.lb-overlay.open{display:flex;}
-.lb-inner{
-  position:relative;
-  width:100svw;
-  height:100svh;
-  max-width:100svw;
-  max-height:100svh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-  box-sizing:border-box;
-}
-#lb-img{
-  max-width:100%;
-  max-height:100%;
-  width:auto;
-  height:auto;
-  object-fit:contain;
-  margin:0;
-  display:block;
-  -webkit-user-select:none;
-  user-select:none;
-  pointer-events:auto;
-}
-#lb-close{
-  position:fixed;
-  top:calc(env(safe-area-inset-top) + 10px);
-  right:calc(env(safe-area-inset-right) + 12px);
-  background:rgba(255,255,255,.16);
-  color:#fff;
-  border:0;
-  padding:.48rem .78rem;
-  font-size:1rem;
-  line-height:1;
-  border-radius:32px;
-  cursor:pointer;
-  backdrop-filter:blur(4px);
-}
-#lb-close:hover,#lb-close:focus{background:rgba(255,255,255,.28);outline:none;}
-body.lb-open{overflow:hidden;}
-body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;transition:.25s;}
-@media (orientation:landscape){
-  .lb-inner{width:100svw;height:100svh;}
-  #lb-img{max-width:100%;max-height:100%;}
-}
-</style>
-<div id="lightbox" class="lb-overlay" aria-hidden="true" role="dialog">
-  <div class="lb-inner" role="document">
-    <img id="lb-img" alt=""/>
-    <button id="lb-close" type="button" aria-label="Fermer">×</button>
-  </div>
-</div>
-
-<script>
-(function(){
-  const thumbs=document.querySelectorAll('.gallery-work img');
-  if(!thumbs.length)return;
-  const box=document.getElementById('lightbox'),
-        img=document.getElementById('lb-img'),
-        closeBtn=document.getElementById('lb-close');
-  let lock=false, savedPad= '';
-
-  function viewportDims(){
-    if(window.visualViewport){
-      return { w: window.visualViewport.width, h: window.visualViewport.height };
-    }
-    return { w: window.innerWidth, h: window.innerHeight };
-  }
-
-  function adjust(){
-    if(!box.classList.contains('open')) return;
-    const vp=viewportDims();
-    img.style.maxWidth = vp.w + 'px';
-    img.style.maxHeight = vp.h + 'px';
-  }
-
-  function open(src,alt){
-    if(lock)return;
-    savedPad = document.body.style.paddingTop || '';
-    document.body.style.paddingTop = '0'; // retire l’offset navbar
-    img.src=src; img.alt=alt||'';
-    box.classList.add('open'); box.setAttribute('aria-hidden','false');
-    document.body.classList.add('lb-open');
-    closeBtn.focus();
-    // petit délai pour laisser le viewport mobile se stabiliser
-    setTimeout(adjust,50);
-    setTimeout(adjust,250);
-  }
-
-  function close(){
-    lock=true;
-    box.classList.remove('open'); box.setAttribute('aria-hidden','true');
-    document.body.classList.remove('lb-open');
-    document.body.style.paddingTop = savedPad;
-    setTimeout(()=>{ img.src=''; lock=false; },200);
-  }
-
-  thumbs.forEach(t=>{
-    t.style.cursor='zoom-in';
-    t.tabIndex = t.tabIndex || 0;
-    const src = t.getAttribute('data-large')||t.src;
-    function trigger(e){
-      e.preventDefault();
-      open(src, t.alt||'');
-    }
-    t.addEventListener('click', trigger);
-    t.addEventListener('keydown', e=>{
-      if(e.key==='Enter'||e.key===' '){ trigger(e); }
-    });
-    t.addEventListener('pointerdown', e=>{
-      if(e.pointerType==='touch'){ trigger(e); }
-    }, {passive:true});
-  });
-
-  closeBtn.addEventListener('click', e=>{ e.stopPropagation(); close(); });
-  box.addEventListener('click', e=>{ if(e.target===box) close(); });
-  document.addEventListener('keydown', e=>{
-    if(e.key==='Escape'&&box.classList.contains('open')) close();
-  });
-
-  window.addEventListener('resize', adjust);
-  window.addEventListener('orientationchange', ()=>setTimeout(adjust,160));
-  if(window.visualViewport){
-    visualViewport.addEventListener('resize', ()=>setTimeout(adjust,40));
-  }
-})();
-</script>
-
-<script>
-  (function(){
-    function updateNavOffset() {
-      var nav=document.querySelector('.navbar');
-      var offset=nav?Math.ceil(nav.getBoundingClientRect().height):80;
-      document.documentElement.style.setProperty('--site-nav-offset', offset+'px');
-      document.body.style.paddingTop=offset+'px';
-    }
-    var tries=0;
-    function waitForNav(){
-      if(document.querySelector('.navbar')){ updateNavOffset(); return; }
-      if(++tries<40) setTimeout(waitForNav,50); else updateNavOffset();
-    }
-    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', waitForNav);
-    else waitForNav();
-    window.addEventListener('resize', ()=>setTimeout(updateNavOffset,80));
-    window.addEventListener('load', ()=>setTimeout(updateNavOffset,120));
-  })();
-</script>
-<style>
-/* === Lightbox responsive + script description === */
-:root { --vvh: 100vh; } /* sera recalculé par JS */
-.lightbox-overlay {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,.94);
-  z-index: 7000;
-  touch-action: none;
-}
-.lightbox-overlay.open { display: flex; }
-.lightbox-inner {
-  width: var(--vvw);
-  height: var(--vvh);
-  max-width: var(--vvw);
-  max-height: var(--vvh);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-  overflow: hidden;
-}
-#lightbox-img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  display: block;
-  -webkit-user-select: none;
-  user-select: none;
-  margin: 0;
-}
-#lightbox-close {
-  position: fixed;
-  top: calc(env(safe-area-inset-top,0px) + 10px);
-  right: calc(env(safe-area-inset-right,0px) + 12px);
-  background: rgba(255,255,255,.25);
-  color:#fff;
-  border:0;
-  padding:.5rem .82rem;
-  font-size:1rem;
-  line-height:1;
-  border-radius:32px;
-  cursor:pointer;
-  backdrop-filter:blur(5px);
-  z-index:7100;
-}
-#lightbox-close:hover,#lightbox-close:focus { background: rgba(255,255,255,.38); outline:none; }
-
-/* Assurer que le déclencheur "En savoir plus" est toujours au-dessus du flux normal (et cliquable) */
-.gallery-desc { z-index: 20; position: relative; }
-.expanded-text { z-index: 30; }
-
-/* paysage : ne pas figer la taille, laisser JS recalculer */
-@media (orientation: landscape) {
-  .lightbox-inner { width: var(--vvw); height: var(--vvh); }
-}
-</style>
-<!-- (ne duplique pas div lightbox si déjà présent; si doublon présent, conserver UNE seule instance) -->
-<div id="lightbox" class="lightbox-overlay" aria-hidden="true" role="dialog" aria-modal="true">
-  <div class="lightbox-inner">
-    <img id="lightbox-img" alt="">
-    <button id="lightbox-close" aria-label="Fermer plein écran">✕</button>
-  </div>
-</div>
-
-<script>
-/* Script description (En savoir plus) rétabli / robuste */
-(function(){
-  const trigger = document.getElementById('gallery-desc');
-  const panel   = document.getElementById('gallery-desc-full');
-  const closeB  = document.getElementById('gallery-desc-close');
-  if(!trigger || !panel) return;
-
-  function openDesc(){
-    panel.style.display='block';
-    requestAnimationFrame(()=>{
-      panel.classList.add('open');
-      panel.setAttribute('aria-hidden','false');
-      trigger.setAttribute('aria-expanded','true');
-      if (closeB) closeB.focus();
-    });
-  }
-  function closeDesc(){
-    panel.classList.remove('open');
-    panel.setAttribute('aria-hidden','true');
-    trigger.setAttribute('aria-expanded','false');
-    setTimeout(()=>{ panel.style.display='none'; trigger.focus(); },220);
-  }
-  function toggle(){ panel.classList.contains('open') ? closeDesc() : openDesc(); }
-
-  // Clic desktop & mobile
-  trigger.addEventListener('click', function(e){
-    toggle();
-  });
-
-  // Clavier
-  trigger.addEventListener('keydown', function(e){
-    if(e.key === 'Enter' || e.key === ' '){
-      e.preventDefault();
-      toggle();
-    }
-  });
-
-  // Bouton fermer
-  if(closeB){
-    closeB.addEventListener('click', function(e){
-      e.stopPropagation();
-      closeDesc();
-    });
-    closeB.addEventListener('keydown', function(e){
-      if(e.key === 'Enter' || e.key === ' '){
-        e.preventDefault();
-        closeDesc();
-      }
-    });
-  }
-})();
-</script>
-
-<script>
-/* Lightbox plein écran: calcul fiable viewport (iOS paysage avec visualViewport) */
-(function(){
-  const thumbs = document.querySelectorAll('.gallery-work img');
-  if(!thumbs.length) return;
-  const box = document.getElementById('lightbox');
-  const img = document.getElementById('lightbox-img');
-  const closeBtn = document.getElementById('lightbox-close');
-  let lock=false, savedPad='';
-
-  function setViewportVars(){
-    const vw = window.visualViewport ? window.visualViewport.width : window.innerWidth;
-    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    document.documentElement.style.setProperty('--vvw', vw + 'px');
-    document.documentElement.style.setProperty('--vvh', vh + 'px');
-  }
-
-  function hideIOSBars(){
-    // petit scroll pour forcer la réduction de la barre d'adresse sur iOS en paysage
-    window.scrollTo(0,1);
-  }
-
-  function open(src, alt){
-    if(lock) return;
-    savedPad = document.body.style.paddingTop || '';
-    document.body.style.paddingTop='0';
-    img.src=src; img.alt=alt||'';
-    setViewportVars();
-    box.classList.add('open');
-    box.setAttribute('aria-hidden','false');
-    document.body.classList.add('lb-open');
-    hideIOSBars();
-    closeBtn.focus();
-    // recalculs différés (UI iOS se réajuste après animation)
-    setTimeout(()=>{ setViewportVars(); hideIOSBars(); },120);
-    setTimeout(setViewportVars,400);
-  }
-
-  function close(){
-    lock=true;
-    box.classList.remove('open');
-    box.setAttribute('aria-hidden','true');
-    document.body.classList.remove('lb-open');
-    document.body.style.paddingTop = savedPad;
-    setTimeout(()=>{ img.src=''; lock=false; },180);
-  }
-
-  thumbs.forEach(t=>{
-    t.style.cursor='zoom-in';
-    if(!t.hasAttribute('tabindex')) t.tabIndex=0;
-    const src = t.getAttribute('data-large') || t.src;
-    function trigger(e){ e.preventDefault(); open(src, t.alt||''); }
-    t.addEventListener('click', trigger);
-    t.addEventListener('pointerdown', e=>{ if(e.pointerType==='touch') trigger(e); }, {passive:true});
-    t.addEventListener('keydown', e=>{
-      if(e.key==='Enter'||e.key===' ') trigger(e);
-    });
-  });
-
-  closeBtn.addEventListener('click', e=>{ e.stopPropagation(); close(); });
-  box.addEventListener('click', e=>{ if(e.target===box) close(); });
-  document.addEventListener('keydown', e=>{
-    if(e.key==='Escape' && box.classList.contains('open')) close();
-  });
-
-  // Mise à jour viewport
-  function refreshIfOpen(){
-    if(box.classList.contains('open')){
-      setViewportVars();
-    }
-  }
-  window.addEventListener('resize', ()=> setTimeout(refreshIfOpen,60));
-  window.addEventListener('orientationchange', ()=> setTimeout(()=>{ refreshIfOpen(); hideIOSBars(); },180));
-  if(window.visualViewport){
-    visualViewport.addEventListener('resize', ()=> setTimeout(refreshIfOpen,40));
-  }
-})();
-</script>
-
-<style>
-/* Lightbox minimal propre */
+/* Lightbox unique simplifiée */
 .lightbox-overlay{
   position:fixed; inset:0;
   display:none;
@@ -800,7 +436,7 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
 }
 .lightbox-overlay.open{display:flex;}
 .lightbox-inner{
-  width:100vw; height:100vh;
+  width:100vw; height:100dvh;
   display:flex; align-items:center; justify-content:center;
   padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   box-sizing:border-box;
@@ -827,9 +463,8 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
 #lightbox-close:hover,#lightbox-close:focus{background:rgba(255,255,255,.42);outline:none;}
 body.lb-open{overflow:hidden;}
 body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;transition:.25s;}
-/* Désactive ouverture accidentelle par simple tap: pas de listener pointerdown */
-.gallery-work img{cursor:zoom-in;}
-/* Bouton + optionnel */
+/* Bouton + */
+.gallery-work{position:relative;}
 .zoom-btn{
   position:absolute; top:8px; right:8px;
   background:rgba(0,0,0,.55); color:#fff; border:0;
@@ -838,40 +473,80 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
   opacity:.85;
 }
 .zoom-btn:hover,.zoom-btn:focus{opacity:1;}
-.gallery-work{position:relative;}
+/* Empêcher ouverture involontaire via image seule */
+.gallery-work img{cursor:default;}
 </style>
+
 <div id="lightbox" class="lightbox-overlay" aria-hidden="true" role="dialog" aria-modal="true">
   <div class="lightbox-inner">
     <img id="lightbox-img" alt="">
     <button id="lightbox-close" aria-label="Fermer">✕</button>
   </div>
 </div>
+
 <script>
+/* Script description réparé (En savoir plus) */
+(function(){
+  const trigger=document.getElementById('gallery-desc');
+  const panel=document.getElementById('gallery-desc-full');
+  const closeB=document.getElementById('gallery-desc-close');
+  if(!trigger||!panel) return;
+  function openDesc(){
+    panel.style.display='block';
+    requestAnimationFrame(()=>{ panel.classList.add('open'); panel.setAttribute('aria-hidden','false'); trigger.setAttribute('aria-expanded','true'); closeB&&closeB.focus(); });
+  }
+  function closeDesc(){
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden','true');
+    trigger.setAttribute('aria-expanded','false');
+    setTimeout(()=>{ panel.style.display='none'; trigger.focus(); },200);
+  }
+  function toggle(){ panel.classList.contains('open')?closeDesc():openDesc(); }
+  trigger.addEventListener('click', e=>{ e.preventDefault(); toggle(); });
+  trigger.addEventListener('keydown', e=>{
+    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); }
+  });
+  if(closeB){
+    closeB.addEventListener('click', e=>{ e.stopPropagation(); closeDesc(); });
+    closeB.addEventListener('keydown', e=>{
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); closeDesc(); }
+    });
+  }
+})();
+</script>
+
+<script>
+/* Lightbox unique (ouverture uniquement via bouton +) */
 (function(){
   const box=document.getElementById('lightbox');
   const img=document.getElementById('lightbox-img');
   const closeBtn=document.getElementById('lightbox-close');
-  const thumbs=[...document.querySelectorAll('.gallery-work img')];
   let savedPad='', loading=false;
 
-  // Ajouter bouton + (et supprimer anciens boutons)
+  // Corriger chemins manquants (adapter si vos fichiers sont ailleurs)
+  document.querySelectorAll('.gallery-work img').forEach(el=>{
+    // Normaliser data-large: si pas de dossier mais autres ont /la-maison/, on ajoute
+    if(el.dataset.large && !el.dataset.large.startsWith('img/la-maison/') && el.dataset.large.includes('maison-')){
+      el.dataset.large='img/la-maison/'+el.dataset.large.split('/').pop();
+    }
+  });
+
+  // Nettoyer anciens boutons +
   document.querySelectorAll('.zoom-btn').forEach(b=>b.remove());
+
+  // Ajouter bouton + sur chaque image
   document.querySelectorAll('.gallery-work').forEach(w=>{
     const pic=w.querySelector('img');
     if(!pic) return;
-    const b=document.createElement('button');
-    b.type='button'; b.className='zoom-btn'; b.textContent='+';
-    b.addEventListener('click', e=>{
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='zoom-btn';
+    btn.textContent='+';
+    btn.addEventListener('click', e=>{
       e.stopPropagation();
       open(pic.getAttribute('data-large')||pic.src, pic.alt||'');
     });
-    w.appendChild(b);
-  });
-
-  // Retirer anciens listeners sur images (clonage léger)
-  thumbs.forEach(t=>{
-    const c=t.cloneNode(true);
-    t.parentNode.replaceChild(c,t);
+    w.appendChild(btn);
   });
 
   function open(src, alt){
@@ -880,15 +555,8 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
     savedPad=document.body.style.paddingTop||'';
     document.body.style.paddingTop='0';
     img.classList.remove('ready');
-    img.onload=function(){
-      img.classList.add('ready');
-      loading=false;
-    };
-    img.onerror=function(){
-      loading=false;
-      alert('Image introuvable: '+src);
-      close();
-    };
+    img.onload=function(){ img.classList.add('ready'); loading=false; };
+    img.onerror=function(){ loading=false; alert('Image introuvable: '+src); close(); };
     img.src=src; img.alt=alt||'';
     box.classList.add('open');
     box.setAttribute('aria-hidden','false');
@@ -901,17 +569,8 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
     box.setAttribute('aria-hidden','true');
     document.body.classList.remove('lb-open');
     document.body.style.paddingTop=savedPad;
-    setTimeout(()=>{ img.src=''; img.classList.remove('ready'); },180);
+    setTimeout(()=>{ img.src=''; img.classList.remove('ready'); },160);
   }
-
-  // Desktop: clic sur image pour ouvrir
-  document.addEventListener('click', function(e){
-    const target=e.target;
-    if(target.matches('.gallery-work img')){
-      e.preventDefault();
-      open(target.getAttribute('data-large')||target.src, target.alt||'');
-    }
-  });
 
   closeBtn.addEventListener('click', e=>{ e.stopPropagation(); close(); });
   box.addEventListener('click', e=>{ if(e.target===box) close(); });
