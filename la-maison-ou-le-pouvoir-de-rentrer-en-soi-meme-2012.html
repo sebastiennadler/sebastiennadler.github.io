@@ -568,5 +568,44 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
   });
 })();
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('menu-toggle');
+  var nav = document.querySelector('.nav-links');
+  if(!btn || !nav) return;
+
+  // état initial
+  btn.setAttribute('aria-expanded','false');
+  btn.setAttribute('aria-controls','nav-links');
+  nav.id = 'nav-links';
+
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    var open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.body.classList.toggle('menu-open', open);
+  });
+
+  // fermeture auto après clic sur un lien (mobile)
+  nav.addEventListener('click', function(e){
+    if(e.target.tagName === 'A' && nav.classList.contains('open')){
+      nav.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');
+      document.body.classList.remove('menu-open');
+    }
+  });
+
+  // fermeture sur échappement clavier
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && nav.classList.contains('open')){
+      nav.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');
+      document.body.classList.remove('menu-open');
+      btn.focus();
+    }
+  });
+});
+</script>
 </body>
 </html>
