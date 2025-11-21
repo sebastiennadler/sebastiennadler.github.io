@@ -600,9 +600,9 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
 }
 .lightbox-overlay.open { display: flex; }
 .lightbox-inner {
-  width: 100vw;
+  width: var(--vvw);
   height: var(--vvh);
-  max-width: 100vw;
+  max-width: var(--vvw);
   max-height: var(--vvh);
   display: flex;
   align-items: center;
@@ -617,9 +617,10 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
   width: auto;
   height: auto;
   object-fit: contain;
+  display: block;
   -webkit-user-select: none;
   user-select: none;
-  display: block;
+  margin: 0;
 }
 #lightbox-close {
   position: fixed;
@@ -637,17 +638,26 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
   z-index:7100;
 }
 #lightbox-close:hover,#lightbox-close:focus { background: rgba(255,255,255,.38); outline:none; }
-body.lb-open { overflow:hidden; }
-body.lb-open .navbar { transform:translateY(-140%); opacity:0; pointer-events:none; transition:.25s; }
+
+/* Assurer que le déclencheur "En savoir plus" est toujours au-dessus du flux normal (et cliquable) */
+.gallery-desc { z-index: 20; position: relative; }
+.expanded-text { z-index: 30; }
+
+/* paysage : ne pas figer la taille, laisser JS recalculer */
+@media (orientation: landscape) {
+  .lightbox-inner { width: var(--vvw); height: var(--vvh); }
+}
 </style>
+<!-- (ne duplique pas div lightbox si déjà présent; si doublon présent, conserver UNE seule instance) -->
 <div id="lightbox" class="lightbox-overlay" aria-hidden="true" role="dialog" aria-modal="true">
   <div class="lightbox-inner">
     <img id="lightbox-img" alt="">
     <button id="lightbox-close" aria-label="Fermer plein écran">✕</button>
   </div>
 </div>
+
 <script>
-/* Bascule description "En savoir plus" */
+/* Script description (En savoir plus) rétabli / robuste */
 (function(){
   const trigger = document.getElementById('gallery-desc');
   const panel   = document.getElementById('gallery-desc-full');
@@ -656,19 +666,26 @@ body.lb-open .navbar { transform:translateY(-140%); opacity:0; pointer-events:no
 
   function openDesc(){
     panel.style.display='block';
-    requestAnimationFrame(()=>{ panel.classList.add('open'); panel.setAttribute('aria-hidden','false'); trigger.setAttribute('aria-expanded','true'); closeB && closeB.focus(); });
+    requestAnimationFrame(()=>{
+      panel.classList.add('open');
+      panel.setAttribute('aria-hidden','false');
+      trigger.setAttribute('aria-expanded','true');
+      if (closeB) closeB.focus();
+    });
   }
   function closeDesc(){
     panel.classList.remove('open');
     panel.setAttribute('aria-hidden','true');
     trigger.setAttribute('aria-expanded','false');
-    setTimeout(()=>{ panel.style.display='none'; trigger.focus(); },260);
+    setTimeout(()=>{ panel.style.display='none'; trigger.focus(); },240);
   }
   function toggle(){ panel.classList.contains('open') ? closeDesc() : openDesc(); }
 
   trigger.addEventListener('click', e=>{ e.preventDefault(); toggle(); });
   trigger.addEventListener('keydown', e=>{
-    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); }
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault(); toggle();
+    }
   });
   if(closeB){
     closeB.addEventListener('click', e=>{ e.stopPropagation(); closeDesc(); });
@@ -678,8 +695,9 @@ body.lb-open .navbar { transform:translateY(-140%); opacity:0; pointer-events:no
   }
 })();
 </script>
+
 <script>
-/* Lightbox plein écran robuste iPhone paysage */
+/* Lightbox plein écran: calcul fiable viewport (iOS paysage avec visualViewport) */
 (function(){
   const thumbs = document.querySelectorAll('.gallery-work img');
   if(!thumbs.length) return;
@@ -688,9 +706,16 @@ body.lb-open .navbar { transform:translateY(-140%); opacity:0; pointer-events:no
   const closeBtn = document.getElementById('lightbox-close');
   let lock=false, savedPad='';
 
-  function setVvh(){
-    const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    document.documentElement.style.setProperty('--vvh', h + 'px');
+  function setViewportVars(){
+    const vw = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    document.documentElement.style.setProperty('--vvw', vw + 'px');
+    document.documentElement.style.setProperty('--vvh', vh + 'px');
+  }
+
+  function hideIOSBars(){
+    // petit scroll pour forcer la réduction de la barre d'adresse sur iOS en paysage
+    window.scrollTo(0,1);
   }
 
   function open(src, alt){
@@ -698,14 +723,15 @@ body.lb-open .navbar { transform:translateY(-140%); opacity:0; pointer-events:no
     savedPad = document.body.style.paddingTop || '';
     document.body.style.paddingTop='0';
     img.src=src; img.alt=alt||'';
+    setViewportVars();
     box.classList.add('open');
     box.setAttribute('aria-hidden','false');
     document.body.classList.add('lb-open');
+    hideIOSBars();
     closeBtn.focus();
-    setVvh();
-    // recalcul supplémentaire après animation UI iOS
-    setTimeout(setVvh,120);
-    setTimeout(setVvh,400);
+    // recalculs différés (UI iOS se réajuste après animation)
+    setTimeout(()=>{ setViewportVars(); hideIOSBars(); },120);
+    setTimeout(setViewportVars,400);
   }
 
   function close(){
@@ -724,17 +750,27 @@ body.lb-open .navbar { transform:translateY(-140%); opacity:0; pointer-events:no
     function trigger(e){ e.preventDefault(); open(src, t.alt||''); }
     t.addEventListener('click', trigger);
     t.addEventListener('pointerdown', e=>{ if(e.pointerType==='touch') trigger(e); }, {passive:true});
-    t.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' ') trigger(e); });
+    t.addEventListener('keydown', e=>{
+      if(e.key==='Enter'||e.key===' ') trigger(e);
+    });
   });
 
   closeBtn.addEventListener('click', e=>{ e.stopPropagation(); close(); });
   box.addEventListener('click', e=>{ if(e.target===box) close(); });
-  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && box.classList.contains('open')) close(); });
+  document.addEventListener('keydown', e=>{
+    if(e.key==='Escape' && box.classList.contains('open')) close();
+  });
 
-  window.addEventListener('resize', ()=>{ if(box.classList.contains('open')) setVvh(); });
-  window.addEventListener('orientationchange', ()=>{ setTimeout(()=>{ if(box.classList.contains('open')) setVvh(); },180); });
+  // Mise à jour viewport
+  function refreshIfOpen(){
+    if(box.classList.contains('open')){
+      setViewportVars();
+    }
+  }
+  window.addEventListener('resize', ()=> setTimeout(refreshIfOpen,60));
+  window.addEventListener('orientationchange', ()=> setTimeout(()=>{ refreshIfOpen(); hideIOSBars(); },180));
   if(window.visualViewport){
-    visualViewport.addEventListener('resize', ()=>{ if(box.classList.contains('open')) setVvh(); });
+    visualViewport.addEventListener('resize', ()=> setTimeout(refreshIfOpen,40));
   }
 })();
 </script>
