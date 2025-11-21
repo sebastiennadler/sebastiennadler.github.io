@@ -790,72 +790,106 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
 </script>
 
 <style>
-/* Bouton zoom discret */
-.zoom-btn {
-  position:absolute;
-  top:6px; right:6px;
-  background:rgba(0,0,0,.55);
-  color:#fff;
-  border:0;
-  padding:.35rem .55rem;
-  font-size:.85rem;
-  line-height:1;
-  border-radius:6px;
-  cursor:pointer;
-  opacity:.75;
+/* Lightbox minimal */
+.lightbox-overlay {
+  position:fixed; inset:0; display:none;
+  align-items:center; justify-content:center;
+  background:rgba(0,0,0,.92); z-index:6000;
 }
-.zoom-btn:hover,.zoom-btn:focus { opacity:1; }
-.zoom-wrap { position:relative; display:inline-block; }
-.gallery-work img { touch-action:pan-y; }
-.navbar { z-index:5000; }
-.lightbox-overlay:not(.open){ pointer-events:none; }
+.lightbox-overlay.open { display:flex; }
+.lightbox-inner {
+  width:100vw; height:100vh; max-width:100vw; max-height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  box-sizing:border-box;
+}
+#lightbox-img {
+  max-width:100%; max-height:100%;
+  width:auto; height:auto; object-fit:contain;
+  -webkit-user-select:none; user-select:none;
+}
+#lightbox-close {
+  position:fixed; top:calc(env(safe-area-inset-top,0px) + 10px);
+  right:calc(env(safe-area-inset-right,0px) + 12px);
+  background:rgba(255,255,255,.25); color:#fff; border:0;
+  padding:.5rem .82rem; font-size:1rem; line-height:1;
+  border-radius:32px; cursor:pointer; backdrop-filter:blur(4px); z-index:6100;
+}
+#lightbox-close:hover,#lightbox-close:focus { background:rgba(255,255,255,.38); outline:none; }
+body.lb-open { overflow:hidden; }
+body.lb-open .navbar { transform:translateY(-130%); opacity:0; pointer-events:none; transition:.25s; }
+
+/* Bouton + fixe sur chaque vignette */
+.gallery-work { position:relative; }
+.gallery-work .zoom-btn {
+  position:absolute; top:8px; right:8px;
+  background:rgba(0,0,0,.55); color:#fff; border:0;
+  padding:.38rem .6rem; font-size:.85rem; line-height:1;
+  border-radius:6px; cursor:pointer; opacity:.8;
+}
+.gallery-work .zoom-btn:hover,.gallery-work .zoom-btn:focus { opacity:1; }
 </style>
 
-<script>
-/* Hamburger fallback si script global absent */
-(function(){
-  var btn=document.getElementById('menu-toggle');
-  var links=document.querySelector('.nav-links');
-  if(btn && links && !btn.dataset.enhanced){
-    btn.dataset.enhanced='1';
-    btn.addEventListener('click', function(e){
-      e.preventDefault();
-      var open=links.classList.toggle('open');
-      btn.setAttribute('aria-expanded', open?'true':'false');
-      document.body.classList.toggle('menu-open', open);
-    });
-  }
-})();
-</script>
+<!-- Lightbox HTML unique -->
+<div id="lightbox" class="lightbox-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="lightbox-inner">
+    <img id="lightbox-img" alt="">
+    <button id="lightbox-close" aria-label="Fermer plein écran">✕</button>
+  </div>
+</div>
 
 <script>
-/* Lightbox – ouverture contrôlée (double tap, long press, bouton +, clic desktop) */
+/* Injection des boutons + (si pas déjà ajoutés) et gestion Lightbox */
 (function(){
-  const thumbs = document.querySelectorAll('.gallery-work img');
-  if(!thumbs.length) return;
+  const works = document.querySelectorAll('.gallery-work');
   const box = document.getElementById('lightbox');
   const img = document.getElementById('lightbox-img');
   const closeBtn = document.getElementById('lightbox-close');
-  let lock=false, savedPad='', lastTapTime=0, pressTimer=null, moved=false;
+  let lock=false, savedPad='';
 
-  function setViewportVars(){
+  // Retirer tout gestionnaire d’ouverture existant sur les images (nettoyage)
+  document.querySelectorAll('.gallery-work img').forEach(i=>{
+    i.replaceWith(i.cloneNode(true)); // supprime anciens listeners
+  });
+
+  // Ajouter bouton + si manquant
+  works.forEach(w=>{
+    const pic = w.querySelector('img');
+    if(!pic) return;
+    if(!w.querySelector('.zoom-btn')){
+      const b = document.createElement('button');
+      b.type='button';
+      b.className='zoom-btn';
+      b.textContent='+';
+      b.addEventListener('click', e=>{
+        e.stopPropagation();
+        open(pic.getAttribute('data-large')||pic.src, pic.alt||'');
+      });
+      w.appendChild(b);
+    }
+  });
+
+  function setViewport(){
     const vw = window.visualViewport ? window.visualViewport.width : window.innerWidth;
     const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    document.documentElement.style.setProperty('--vvw', vw+'px');
-    document.documentElement.style.setProperty('--vvh', vh+'px');
+    // pas de style inline sur img nécessaire (object-fit suffit)
+    box.style.setProperty('--vw', vw+'px');
+    box.style.setProperty('--vh', vh+'px');
   }
+
   function open(src, alt){
     if(lock) return;
     savedPad = document.body.style.paddingTop || '';
     document.body.style.paddingTop='0';
     img.src=src; img.alt=alt||'';
-    setViewportVars();
+    setViewport();
     box.classList.add('open');
     box.setAttribute('aria-hidden','false');
     document.body.classList.add('lb-open');
     closeBtn.focus();
-    setTimeout(setViewportVars,120);
+    setTimeout(setViewport,120);
   }
+
   function close(){
     lock=true;
     box.classList.remove('open');
@@ -865,81 +899,15 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
     setTimeout(()=>{ img.src=''; lock=false; },180);
   }
 
-  function attach(imgEl){
-    // enveloppe + bouton zoom
-    const wrap = document.createElement('span');
-    wrap.className='zoom-wrap';
-    imgEl.parentNode.insertBefore(wrap, imgEl);
-    wrap.appendChild(imgEl);
-    const btn = document.createElement('button');
-    btn.type='button';
-    btn.className='zoom-btn';
-    btn.textContent='+';
-    btn.addEventListener('click', (e)=>{
-      e.stopPropagation();
-      open(imgEl.getAttribute('data-large')||imgEl.src, imgEl.alt||'');
-    });
-    wrap.appendChild(btn);
-
-    // Desktop : clic ouvre
-    imgEl.addEventListener('click', function(e){
-      if (e.pointerType === 'touch') return; // touch géré séparément
-      e.preventDefault();
-      open(imgEl.getAttribute('data-large')||imgEl.src, imgEl.alt||'');
-    });
-
-    // Touch : double tap ou long press
-    imgEl.addEventListener('touchstart', function(e){
-      moved=false;
-      const now=Date.now();
-      if(now - lastTapTime < 340){
-        // double tap
-        e.preventDefault();
-        open(imgEl.getAttribute('data-large')||imgEl.src, imgEl.alt||'');
-        lastTapTime=0;
-        clearTimeout(pressTimer);
-        return;
-      }
-      lastTapTime=now;
-      // long press
-      pressTimer=setTimeout(()=>{
-        if(!moved){
-          open(imgEl.getAttribute('data-large')||imgEl.src, imgEl.alt||'');
-        }
-      },600);
-    }, {passive:true});
-
-    imgEl.addEventListener('touchmove', function(){
-      moved=true;
-      clearTimeout(pressTimer);
-    }, {passive:true});
-
-    imgEl.addEventListener('touchend', function(){
-      clearTimeout(pressTimer);
-    });
-  }
-
-  thumbs.forEach(t=>{
-    t.style.cursor='zoom-in';
-    if(!t.hasAttribute('tabindex')) t.tabIndex=0;
-    attach(t);
-    t.addEventListener('keydown', e=>{
-      if(e.key==='Enter'||e.key===' '){
-        e.preventDefault();
-        open(t.getAttribute('data-large')||t.src, t.alt||'');
-      }
-    });
-  });
-
   closeBtn.addEventListener('click', e=>{ e.stopPropagation(); close(); });
   box.addEventListener('click', e=>{ if(e.target===box) close(); });
-  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && box.classList.contains('open')) close(); });
-
-  function refreshIfOpen(){ if(box.classList.contains('open')) setViewportVars(); }
-  window.addEventListener('resize', ()=> setTimeout(refreshIfOpen,60));
-  window.addEventListener('orientationchange', ()=> setTimeout(refreshIfOpen,160));
+  document.addEventListener('keydown', e=>{
+    if(e.key==='Escape' && box.classList.contains('open')) close();
+  });
+  window.addEventListener('resize', ()=>{ if(box.classList.contains('open')) setTimeout(setViewport,60); });
+  window.addEventListener('orientationchange', ()=>{ if(box.classList.contains('open')) setTimeout(setViewport,160); });
   if(window.visualViewport){
-    visualViewport.addEventListener('resize', ()=> setTimeout(refreshIfOpen,40));
+    visualViewport.addEventListener('resize', ()=>{ if(box.classList.contains('open')) setTimeout(setViewport,40); });
   }
 })();
 </script>
