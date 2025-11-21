@@ -625,7 +625,7 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
   position: fixed;
   top: calc(env(safe-area-inset-top) + 10px);
   right: calc(env(safe-area-inset-right) + 12px);
-  background: rgba(255,255,255,.16);
+  background: rgba(255,255,255,.18);
   color: #fff;
   border: 0;
   padding: .48rem .78rem;
@@ -636,16 +636,21 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
   backdrop-filter: blur(4px);
   z-index: 6100;
 }
-#lightbox-close:hover,#lightbox-close:focus { background: rgba(255,255,255,.28); outline: none; }
+#lightbox-close:hover,#lightbox-close:focus { background: rgba(255,255,255,.3); outline: none; }
 body.lb-open { overflow: hidden; }
-body.lb-open .navbar { transform: translateY(-130%); opacity:0; pointer-events:none; transition:.25s; }
+body.lb-open .navbar {
+  transform: translateY(-130%);
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s;
+}
 </style>
 
 <!-- Lightbox HTML (remplacer l’ancien bloc) -->
 <div id="lightbox" class="lightbox-overlay" aria-hidden="true" role="dialog" aria-modal="true">
   <div class="lightbox-inner">
     <img id="lightbox-img" alt="">
-    <button id="lightbox-close" aria-label="Fermer la vue plein écran">✕</button>
+    <button id="lightbox-close" aria-label="Fermer plein écran">✕</button>
   </div>
 </div>
 
@@ -657,33 +662,22 @@ body.lb-open .navbar { transform: translateY(-130%); opacity:0; pointer-events:n
   const box = document.getElementById('lightbox');
   const img = document.getElementById('lightbox-img');
   const closeBtn = document.getElementById('lightbox-close');
-  let lock = false, savedPad = '';
+  let lock = false;
+  let savedPad = '';
 
-  function vpSize(){
-    if(window.visualViewport){
-      return { w: window.visualViewport.width, h: window.visualViewport.height };
-    }
-    return { w: window.innerWidth, h: window.innerHeight };
-  }
-  function adjust(){
-    if(!box.classList.contains('open')) return;
-    const vp = vpSize();
-    img.style.maxWidth = vp.w + 'px';
-    img.style.maxHeight = vp.h + 'px';
-  }
   function open(src, alt){
     if(lock) return;
     savedPad = document.body.style.paddingTop || '';
     document.body.style.paddingTop = '0';
+    img.removeAttribute('style'); // retire anciennes dimensions inline éventuelles
     img.src = src;
     img.alt = alt || '';
     box.classList.add('open');
     box.setAttribute('aria-hidden','false');
     document.body.classList.add('lb-open');
     closeBtn.focus();
-    setTimeout(adjust,40);
-    setTimeout(adjust,220);
   }
+
   function close(){
     lock = true;
     box.classList.remove('open');
@@ -692,22 +686,40 @@ body.lb-open .navbar { transform: translateY(-130%); opacity:0; pointer-events:n
     document.body.style.paddingTop = savedPad;
     setTimeout(()=>{ img.src=''; lock=false; },180);
   }
+
   thumbs.forEach(t=>{
     t.style.cursor='zoom-in';
-    t.tabIndex = t.tabIndex || 0;
+    if(!t.hasAttribute('tabindex')) t.tabIndex = 0;
     const src = t.getAttribute('data-large') || t.src;
-    function trigger(e){ e.preventDefault(); open(src, t.alt||''); }
+    function trigger(e){
+      e.preventDefault();
+      open(src, t.alt||'');
+    }
     t.addEventListener('click', trigger);
-    t.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' ') trigger(e); });
-    t.addEventListener('pointerdown', e=>{ if(e.pointerType==='touch') trigger(e); }, {passive:true});
+    t.addEventListener('keydown', e=>{
+      if(e.key==='Enter'||e.key===' ') trigger(e);
+    });
+    t.addEventListener('pointerdown', e=>{
+      if(e.pointerType==='touch') trigger(e);
+    }, {passive:true});
   });
+
   closeBtn.addEventListener('click', e=>{ e.stopPropagation(); close(); });
   box.addEventListener('click', e=>{ if(e.target===box) close(); });
-  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && box.classList.contains('open')) close(); });
-  window.addEventListener('resize', adjust);
-  window.addEventListener('orientationchange', ()=>setTimeout(adjust,160));
+  document.addEventListener('keydown', e=>{
+    if(e.key==='Escape' && box.classList.contains('open')) close();
+  });
+
+  // Sur changement d’orientation / resize : enlever dimensions inline pour laisser CSS recalculer
+  function resetDimensions(){
+    if(box.classList.contains('open')){
+      img.removeAttribute('style');
+    }
+  }
+  window.addEventListener('orientationchange', ()=> setTimeout(resetDimensions, 120));
+  window.addEventListener('resize', resetDimensions);
   if(window.visualViewport){
-    visualViewport.addEventListener('resize', ()=>setTimeout(adjust,50));
+    visualViewport.addEventListener('resize', resetDimensions);
   }
 })();
 </script>
