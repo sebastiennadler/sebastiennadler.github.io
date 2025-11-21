@@ -648,34 +648,44 @@ body.lb-open .navbar {
 
 <!-- Lightbox HTML (remplacer l’ancien bloc) -->
 <div id="lightbox" class="lightbox-overlay" aria-hidden="true" role="dialog" aria-modal="true">
-  <div class="lightbox-inner">
+  <div class="lightbox-inner" id="lightbox-vp">
     <img id="lightbox-img" alt="">
-    <button id="lightbox-close" aria-label="Fermer plein écran">✕</button>
+    <button id="lightbox-close" aria-label="Fermer le plein écran">✕</button>
   </div>
 </div>
-
 <script>
-/* === Script lightbox centré responsive === */
 (function(){
   const thumbs = document.querySelectorAll('.gallery-work img');
   if(!thumbs.length) return;
   const box = document.getElementById('lightbox');
+  const vpWrap = document.getElementById('lightbox-vp');
   const img = document.getElementById('lightbox-img');
   const closeBtn = document.getElementById('lightbox-close');
   let lock = false;
   let savedPad = '';
 
+  function applyViewport(){
+    if(!box.classList.contains('open')) return;
+    const vw = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    vpWrap.style.width = vw + 'px';
+    vpWrap.style.height = vh + 'px';
+    img.style.maxWidth = vw + 'px';
+    img.style.maxHeight = vh + 'px';
+  }
+
   function open(src, alt){
     if(lock) return;
     savedPad = document.body.style.paddingTop || '';
     document.body.style.paddingTop = '0';
-    img.removeAttribute('style'); // retire anciennes dimensions inline éventuelles
     img.src = src;
     img.alt = alt || '';
     box.classList.add('open');
     box.setAttribute('aria-hidden','false');
     document.body.classList.add('lb-open');
     closeBtn.focus();
+    setTimeout(applyViewport, 50);
+    setTimeout(applyViewport, 250);
   }
 
   function close(){
@@ -684,42 +694,33 @@ body.lb-open .navbar {
     box.setAttribute('aria-hidden','true');
     document.body.classList.remove('lb-open');
     document.body.style.paddingTop = savedPad;
-    setTimeout(()=>{ img.src=''; lock=false; },180);
+    setTimeout(()=>{ img.src=''; lock = false; },180);
   }
 
   thumbs.forEach(t=>{
     t.style.cursor='zoom-in';
     if(!t.hasAttribute('tabindex')) t.tabIndex = 0;
     const src = t.getAttribute('data-large') || t.src;
-    function trigger(e){
-      e.preventDefault();
-      open(src, t.alt||'');
-    }
+    function trigger(e){ e.preventDefault(); open(src, t.alt||''); }
     t.addEventListener('click', trigger);
-    t.addEventListener('keydown', e=>{
-      if(e.key==='Enter'||e.key===' ') trigger(e);
-    });
-    t.addEventListener('pointerdown', e=>{
-      if(e.pointerType==='touch') trigger(e);
-    }, {passive:true});
+    t.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' ') trigger(e); });
+    t.addEventListener('pointerdown', e=>{ if(e.pointerType==='touch') trigger(e); }, {passive:true});
   });
 
   closeBtn.addEventListener('click', e=>{ e.stopPropagation(); close(); });
   box.addEventListener('click', e=>{ if(e.target===box) close(); });
-  document.addEventListener('keydown', e=>{
-    if(e.key==='Escape' && box.classList.contains('open')) close();
-  });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && box.classList.contains('open')) close(); });
 
-  // Sur changement d’orientation / resize : enlever dimensions inline pour laisser CSS recalculer
-  function resetDimensions(){
+  function reset(){
     if(box.classList.contains('open')){
       img.removeAttribute('style');
+      applyViewport();
     }
   }
-  window.addEventListener('orientationchange', ()=> setTimeout(resetDimensions, 120));
-  window.addEventListener('resize', resetDimensions);
+  window.addEventListener('resize', ()=> setTimeout(reset,60));
+  window.addEventListener('orientationchange', ()=> setTimeout(reset,160));
   if(window.visualViewport){
-    visualViewport.addEventListener('resize', resetDimensions);
+    visualViewport.addEventListener('resize', ()=> setTimeout(reset,40));
   }
 })();
 </script>
