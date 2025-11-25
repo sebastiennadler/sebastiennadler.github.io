@@ -264,31 +264,18 @@
 <main>
 <div class="gallery-page fade-in">
 <div class="gallery-title">Fête des artistes (2009)</div>
-<div class="gallery-desc">
+<div class="gallery-desc" id="gallery-desc" role="button" tabindex="0" aria-expanded="false">
         Hommage aux artistes, à la création partagée, à la fête et à la fraternité de l’art.
       </div>
 <div class="gallery-works">
-<div class="gallery-work">
-<img alt="Fête des artistes couverture" src="img/fda-2009-couverture.jpg"/>
-<div class="gallery-work-title">Fête des artistes couverture</div>
-<div class="gallery-work-desc"></div>
-</div>
-<div class="gallery-work">
-<img alt="Entre l'Afrique et l'Europe" src="img/entre-lafrique-et-leurope.jpg"/>
-<div class="gallery-work-title">Entre l'Afrique et l'Europe</div>
-<div class="gallery-work-desc"></div>
-</div>
-<div class="gallery-work">
-<img alt="Athènes" src="img/athenes.jpg"/>
-<div class="gallery-work-title">Athènes</div>
-<div class="gallery-work-desc"></div>
-</div>
-<div class="gallery-work">
-<img alt="Naples" src="img/naples.jpg"/>
-<div class="gallery-work-title">Naples</div>
-<div class="gallery-work-desc"></div>
-</div>
-<!-- Ajoute d’autres œuvres selon ta version initiale en gardant ce modèle -->
+  <div class="gallery-work">
+    <img src="img/dragonnier-couverture.jpg" data-large="img/dragonnier-couverture.jpg" alt="Couverture Dragonnier">
+    <div class="gallery-work-title">Couverture Dragonnier</div>
+  </div>
+  <div class="gallery-work">
+    <img src="img/le-vieux-dragonnier.jpg" data-large="img/le-vieux-dragonnier.jpg" alt="Le vieux dragonnier">
+    <div class="gallery-work-title">Le vieux dragonnier</div>
+  </div>
 </div>
 <div class="gallery-citation">
         « L’art est une fête à partager... »
@@ -298,55 +285,11 @@
 </div>
 </div>
 </main>
-<!-- Lightbox pour affichage plein écran -->
-<div class="lightbox" id="lightbox">
-<span class="lightbox-close" id="lightbox-close">×</span>
-<img alt="Œuvre en plein écran" class="lightbox-img" id="lightbox-img" src=""/>
-</div>
 <!-- ===== Pied de page commun à tout le site ===== -->
 <footer>
 <p>© 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
 </footer>
 <!-- ===== Scripts spécifiques à la page ===== -->
-<script>
-
-  document.addEventListener('DOMContentLoaded', function() {
-    // Ouvre lightbox au clic
-    document.querySelectorAll('.gallery-work img').forEach(function(img) {
-      img.addEventListener('click', function() {
-        var lightbox = document.getElementById('lightbox');
-        var lightboxImg = document.getElementById('lightbox-img');
-        lightboxImg.src = this.src;
-        lightbox.style.display = 'flex';
-      });
-    });
-    // Ferme sur croix
-    document.getElementById('lightbox-close').onclick = function() {
-      document.getElementById('lightbox').style.display = 'none';
-      document.getElementById('lightbox-img').src = '';
-    };
-    // Ferme sur clic hors image
-    document.getElementById('lightbox').addEventListener('click', function(e) {
-      if (e.target === this) {
-        this.style.display = 'none';
-        document.getElementById('lightbox-img').src = '';
-      }
-    });
-    // Ferme sur ESC
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        document.getElementById('lightbox').style.display = 'none';
-        document.getElementById('lightbox-img').src = '';
-      }
-    });
-    // Burger menu
-    document.getElementById('menu-toggle').onclick = function() {
-      document.querySelector('.nav-links').classList.toggle('show');
-    };
-    document.querySelectorAll('.fade-in').forEach(function(el) {
-      el.classList.add('visible');
-    });
-  });
-  </script>
+<script src="js/gallery-lightbox.js"></script>
 </body>
 </html>

@@ -262,35 +262,35 @@
 <!-- ===== Contenu principal de la page ===== -->
 <main>
 <div class="gallery-page fade-in">
-<div class="gallery-title">Sur le sentier du dragonnier (2008)</div>
-<div class="gallery-desc">
-        Cheminer au fil du végétal, dans l’univers mystique du dragonnier, entre mémoire et métamorphose.
-      </div>
+  <div class="gallery-title">Sur le sentier du dragonnier (2008)</div>
+  <div id="gallery-desc" class="gallery-desc" role="button" tabindex="0" aria-expanded="false">
+    Cheminer au fil du végétal, dans l’univers mystique du dragonnier, entre mémoire et métamorphose.
+  </div>
 <div class="gallery-works">
-<div class="gallery-work">
-<img alt="Dragonnier couverture" src="img/dragonnier-couverture.jpg"/>
-<div class="gallery-work-title">Dragonnier couverture</div>
-</div>
-<div class="gallery-work">
-<img alt="Le vieux dragonnier" src="img/le-vieux-dragonnier.jpg"/>
-<div class="gallery-work-title">Le vieux dragonnier</div>
-</div>
-<div class="gallery-work">
-<img alt="Le vieux volcan" src="img/le-vieux-volcan.jpg"/>
-<div class="gallery-work-title">Le vieux volcan</div>
-</div>
-<div class="gallery-work">
-<img alt="Au-dessous du volcan" src="img/au-dessous-du-volcan.jpg"/>
-<div class="gallery-work-title">Au-dessous du volcan</div>
-</div>
-<div class="gallery-work">
-<img alt="Sable noir" src="img/sable-noir.jpg"/>
-<div class="gallery-work-title">Sable noir</div>
-</div>
-<div class="gallery-work">
-<img alt="Annapurna" src="img/annapurna.jpg"/>
-<div class="gallery-work-title">Annapurna</div>
-</div>
+  <div class="gallery-work">
+    <img src="img/dragonnier-couverture.jpg" data-large="img/dragonnier-couverture.jpg" alt="Dragonnier couverture"/>
+    <div class="gallery-work-title">Dragonnier couverture</div>
+  </div>
+  <div class="gallery-work">
+    <img src="img/le-vieux-dragonnier.jpg" data-large="img/le-vieux-dragonnier.jpg" alt="Le vieux dragonnier"/>
+    <div class="gallery-work-title">Le vieux dragonnier</div>
+  </div>
+  <div class="gallery-work">
+    <img src="img/le-vieux-volcan.jpg" data-large="img/le-vieux-volcan.jpg" alt="Le vieux volcan"/>
+    <div class="gallery-work-title">Le vieux volcan</div>
+  </div>
+  <div class="gallery-work">
+    <img src="img/au-dessous-du-volcan.jpg" data-large="img/au-dessous-du-volcan.jpg" alt="Au-dessous du volcan"/>
+    <div class="gallery-work-title">Au-dessous du volcan</div>
+  </div>
+  <div class="gallery-work">
+    <img src="img/sable-noir.jpg" data-large="img/sable-noir.jpg" alt="Sable noir"/>
+    <div class="gallery-work-title">Sable noir</div>
+  </div>
+  <div class="gallery-work">
+    <img src="img/annapurna.jpg" data-large="img/annapurna.jpg" alt="Annapurna"/>
+    <div class="gallery-work-title">Annapurna</div>
+  </div>
 </div>
 <div class="gallery-citation">
         « Le sentier du dragonnier, c’est aussi le sentier de la mémoire, de la transformation... »
@@ -300,55 +300,17 @@
 </div>
 </div>
 </main>
-<!-- Lightbox pour affichage plein écran -->
-<div class="lightbox" id="lightbox">
-<span class="lightbox-close" id="lightbox-close">×</span>
-<img alt="Œuvre en plein écran" class="lightbox-img" id="lightbox-img" src=""/>
-</div>
 <!-- ===== Pied de page commun à tout le site ===== -->
 <footer>
 <p>© 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
 </footer>
-<!-- ===== Scripts spécifiques à la page ===== -->
+<!-- SUPPRIMER l’ancien script inline ci-dessous -->
+<!--
 <script>
-
-  document.addEventListener('DOMContentLoaded', function() {
-    // Ouvre lightbox au clic
-    document.querySelectorAll('.gallery-work img').forEach(function(img) {
-      img.addEventListener('click', function() {
-        var lightbox = document.getElementById('lightbox');
-        var lightboxImg = document.getElementById('lightbox-img');
-        lightboxImg.src = this.src;
-        lightbox.style.display = 'flex';
-      });
-    });
-    // Ferme sur croix
-    document.getElementById('lightbox-close').onclick = function() {
-      document.getElementById('lightbox').style.display = 'none';
-      document.getElementById('lightbox-img').src = '';
-    };
-    // Ferme sur clic hors image
-    document.getElementById('lightbox').addEventListener('click', function(e) {
-      if (e.target === this) {
-        this.style.display = 'none';
-        document.getElementById('lightbox-img').src = '';
-      }
-    });
-    // Ferme sur ESC
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        document.getElementById('lightbox').style.display = 'none';
-        document.getElementById('lightbox-img').src = '';
-      }
-    });
-    // Burger menu
-    document.getElementById('menu-toggle').onclick = function() {
-      document.querySelector('.nav-links').classList.toggle('show');
-    };
-    document.querySelectorAll('.fade-in').forEach(function(el) {
-      el.classList.add('visible');
-    });
-  });
-  </script>
+  document.addEventListener('DOMContentLoaded', function() { /* ancien code supprimé */ });
+</script>
+-->
+<!-- Conserver juste -->
+<script src="js/gallery-lightbox.js"></script>
 </body>
 </html>

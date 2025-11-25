@@ -264,38 +264,35 @@
 <main>
 <div class="gallery-page fade-in">
 <div class="gallery-title">Couleurs en nudité (2007)</div>
-<div class="gallery-desc">
-        Le corps à l’état brut, la couleur pour seule parure, la nudité comme expression.
-      </div>
+<div class="gallery-desc" id="gallery-desc" role="button" tabindex="0" aria-expanded="false">
+  Série autour de la peau, de la lumière intérieure et des résonances chromatiques.
+</div>
+
 <div class="gallery-works">
-<div class="gallery-work">
-<img alt="Nudité couverture" src="img/nudite-couverture.jpg"/>
-<div class="gallery-work-title">Nudité couverture</div>
-</div>
-<div class="gallery-work">
-<img alt="Eaux rouges" src="img/eaux-rouges.jpg"/>
-<div class="gallery-work-title">Eaux rouges</div>
-</div>
-<div class="gallery-work">
-<img alt="Au bord du visible" src="img/au-bord-du-visible.jpg"/>
-<div class="gallery-work-title">Au bord du visible</div>
-</div>
-<div class="gallery-work">
-<img alt="Chaleur d'Afrique" src="img/chaleur-dafrique.jpg"/>
-<div class="gallery-work-title">Chaleur d'Afrique</div>
-</div>
-<div class="gallery-work">
-<img alt="Force tranquille" src="img/force-tranquille.jpg"/>
-<div class="gallery-work-title">Force tranquille</div>
-</div>
-<div class="gallery-work">
-<img alt="Entre l'Afrique et l'Europe" src="img/entre-lafrique-et-leurope.jpg"/>
-<div class="gallery-work-title">Entre l'Afrique et l'Europe</div>
-</div>
-<div class="gallery-work">
-<img alt="Sur la terre" src="img/sur-la-terre.jpg"/>
-<div class="gallery-work-title">Sur la terre</div>
-</div>
+  <div class="gallery-work">
+    <img src="img/dragonnier-couverture.jpg" data-large="img/dragonnier-couverture.jpg" alt="Couverture Dragonnier">
+    <div class="gallery-work-title">Couverture Dragonnier</div>
+  </div>
+  <div class="gallery-work">
+    <img src="img/le-vieux-dragonnier.jpg" data-large="img/le-vieux-dragonnier.jpg" alt="Le vieux dragonnier">
+    <div class="gallery-work-title">Le vieux dragonnier</div>
+  </div>
+  <div class="gallery-work">
+    <img src="img/le-vieux-volcan.jpg" data-large="img/le-vieux-volcan.jpg" alt="Le vieux volcan">
+    <div class="gallery-work-title">Le vieux volcan</div>
+  </div>
+  <div class="gallery-work">
+    <img src="img/au-dessous-du-volcan.jpg" data-large="img/au-dessous-du-volcan.jpg" alt="Au-dessous du volcan">
+    <div class="gallery-work-title">Au-dessous du volcan</div>
+  </div>
+  <div class="gallery-work">
+    <img src="img/sable-noir.jpg" data-large="img/sable-noir.jpg" alt="Sable noir">
+    <div class="gallery-work-title">Sable noir</div>
+  </div>
+  <div class="gallery-work">
+    <img src="img/annapurna.jpg" data-large="img/annapurna.jpg" alt="Annapurna">
+    <div class="gallery-work-title">Annapurna</div>
+  </div>
 </div>
 <div class="gallery-citation">
         « La nudité est couleur, la couleur est nudité. »
@@ -315,45 +312,6 @@
 <p>© 2025 Ana Ruiz. Tous droits réservés. | <a href="mentions-legales.html">Mentions légales</a></p>
 </footer>
 <!-- ===== Scripts spécifiques à la page ===== -->
-<script>
-
-  document.addEventListener('DOMContentLoaded', function() {
-    // Ouvre lightbox au clic
-    document.querySelectorAll('.gallery-work img').forEach(function(img) {
-      img.addEventListener('click', function() {
-        var lightbox = document.getElementById('lightbox');
-        var lightboxImg = document.getElementById('lightbox-img');
-        lightboxImg.src = this.src;
-        lightbox.style.display = 'flex';
-      });
-    });
-    // Ferme sur croix
-    document.getElementById('lightbox-close').onclick = function() {
-      document.getElementById('lightbox').style.display = 'none';
-      document.getElementById('lightbox-img').src = '';
-    };
-    // Ferme sur clic hors image
-    document.getElementById('lightbox').addEventListener('click', function(e) {
-      if (e.target === this) {
-        this.style.display = 'none';
-        document.getElementById('lightbox-img').src = '';
-      }
-    });
-    // Ferme sur ESC
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        document.getElementById('lightbox').style.display = 'none';
-        document.getElementById('lightbox-img').src = '';
-      }
-    });
-    // Burger menu
-    document.getElementById('menu-toggle').onclick = function() {
-      document.querySelector('.nav-links').classList.toggle('show');
-    };
-    document.querySelectorAll('.fade-in').forEach(function(el) {
-      el.classList.add('visible');
-    });
-  });
-  </script>
+<script src="js/gallery-lightbox.js"></script>
 </body>
 </html>

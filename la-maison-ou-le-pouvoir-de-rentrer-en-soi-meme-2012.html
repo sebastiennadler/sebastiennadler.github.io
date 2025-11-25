@@ -418,78 +418,6 @@
   </div>
 </main>
 
-<!-- Lightbox (croix hors du tableau) -->
-<style>
-.lightbox-overlay{
-  position:fixed; inset:0;
-  display:none;
-  align-items:center; justify-content:center;
-  background:rgba(0,0,0,.92);
-  z-index:6000;
-}
-.lightbox-overlay.open{display:flex;}
-.lightbox-frame{
-  width:100vw; height:100dvh;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-end;
-  justify-content:flex-start;
-  box-sizing:border-box;
-  padding:calc(env(safe-area-inset-top,0px) + 8px) calc(env(safe-area-inset-right,0px) + 10px) calc(env(safe-area-inset-bottom,0px) + 8px) calc(env(safe-area-inset-left,0px) + 10px);
-  gap:10px;
-}
-#lightbox-close{
-  position:static;
-  background:rgba(255,255,255,.30);
-  color:#fff;
-  border:0;
-  padding:.52rem .9rem;
-  font-size:1rem;
-  line-height:1;
-  border-radius:34px;
-  cursor:pointer;
-  backdrop-filter:blur(4px);
-  align-self:flex-end;
-  flex:0 0 auto;
-}
-#lightbox-close:hover,#lightbox-close:focus{background:rgba(255,255,255,.44);outline:none;}
-.lightbox-inner{
-  flex:1 1 auto;
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
-#lightbox-img{
-  max-width:100%;
-  max-height:100%;
-  width:auto;
-  height:auto;
-  object-fit:contain;
-  opacity:0;
-  transition:opacity .25s;
-  -webkit-user-select:none;
-  user-select:none;
-  display:block;
-}
-#lightbox-img.ready{opacity:1;}
-body.lb-open{overflow:hidden;}
-body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;transition:.25s;}
-.zoom-btn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.55);color:#fff;border:0;padding:.36rem .58rem;font-size:.8rem;line-height:1;border-radius:6px;cursor:pointer;opacity:.85;}
-.zoom-btn:hover,.zoom-btn:focus{opacity:1;}
-.gallery-work{position:relative;}
-</style>
-
-<div id="lightbox" class="lightbox-overlay" aria-hidden="true" role="dialog" aria-modal="true">
-  <div class="lightbox-frame">
-    <button id="lightbox-close" aria-label="Fermer">✕</button>
-    <div class="lightbox-inner">
-      <img id="lightbox-img" alt="">
-    </div>
-  </div>
-</div>
-
 <script>
 /* En savoir plus */
 (function(){
@@ -511,73 +439,6 @@ body.lb-open .navbar{transform:translateY(-130%);opacity:0;pointer-events:none;t
   trigger.addEventListener('click',e=>{e.preventDefault();toggle();});
   trigger.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}});
   closeB&&closeB.addEventListener('click',e=>{e.stopPropagation();closeDesc();});
-})();
-</script>
-
-<script>
-/* Lightbox + boutons + (croix hors image) */
-(function(){
-  const box=document.getElementById('lightbox');
-  const img=document.getElementById('lightbox-img');
-  const closeBtn=document.getElementById('lightbox-close');
-  const BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
-  let loading=false,savedPad='', currentSrc='', aborted=false;
-
-  document.querySelectorAll('.zoom-btn').forEach(b=>b.remove());
-
-  document.querySelectorAll('.gallery-work').forEach(w=>{
-    const pic=w.querySelector('img'); if(!pic) return;
-    if(!w.querySelector('.zoom-btn')){
-      const btn=document.createElement('button');
-      btn.type='button'; btn.className='zoom-btn'; btn.textContent='+';
-      btn.addEventListener('click',e=>{ e.stopPropagation(); open(pic.dataset.large||pic.src,pic.alt||''); });
-      w.appendChild(btn);
-    }
-  });
-
-  function open(src,alt){
-    if(loading) return;
-    loading=true; aborted=false;
-    savedPad=document.body.style.paddingTop||'';
-    document.body.style.paddingTop='0';
-    img.classList.remove('ready');
-    currentSrc=src;
-    const loader=new Image();
-    loader.onload=function(){
-      if(aborted) return;
-      img.src=src; img.alt=alt||'';
-      requestAnimationFrame(()=>img.classList.add('ready'));
-      box.classList.add('open');
-      box.setAttribute('aria-hidden','false');
-      document.body.classList.add('lb-open');
-      closeBtn.focus();
-      loading=false;
-    };
-    loader.onerror=function(){
-      loading=false;
-      if(aborted) return;
-      console.warn('Échec chargement image:',src);
-    };
-    loader.src=src;
-  }
-
-  function close(){
-    aborted=true;
-    box.classList.remove('open');
-    box.setAttribute('aria-hidden','true');
-    document.body.classList.remove('lb-open');
-    document.body.style.paddingTop=savedPad;
-    img.classList.remove('ready');
-    setTimeout(()=>{ img.src=BLANK; currentSrc=''; },150);
-  }
-
-  closeBtn.addEventListener('click',e=>{ e.stopPropagation(); close(); });
-  box.addEventListener('click',e=>{
-    if(e.target===box) close();
-  });
-  document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'&&box.classList.contains('open')) close();
-  });
 })();
 </script>
 
@@ -619,5 +480,6 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 </script>
+<script src="js/gallery-lightbox.js"></script>
 </body>
 </html>
